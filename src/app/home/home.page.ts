@@ -10,14 +10,30 @@ import * as L from 'leaflet';
 })
 export class HomePage {
 
+
   constructor() {}
+
+  openMenu() {
+    const menu = document.querySelector('ion-menu');
+    if (menu) {
+      (menu as any).open();
+    }
+  }
+
+  map: any;
 
   ngAfterViewInit() {
     // Enfoque inicial en San Bernardo, sin límites
-    const map = L.map('map').setView([-33.592, -70.700], 13); // Centro San Bernardo
+    this.map = L.map('map').setView([-33.592, -70.700], 13); // Centro San Bernardo
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+    }).addTo(this.map);
+  }
+
+  goToSanBernardo() {
+    if (this.map) {
+      this.map.setView([-33.592, -70.700], 15, { animate: true });
+    }
   }
 
 }
