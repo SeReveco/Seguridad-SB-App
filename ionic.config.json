@@ -1,0 +1,7 @@
+{
+  "name": "Seguridad-SB-App",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
