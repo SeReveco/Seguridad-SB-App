@@ -1,39 +1,16 @@
-
-
-<ion-menu contentId="main-content">
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item button>Mi Perfil</ion-item>
-      <ion-item button >Iniciar sesión</ion-item>
-      <ion-item button >Registrarse</ion-item>  
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
-
-<ion-content [fullscreen]="true" id="main-content">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <div class="page-content">
-    <div id="map" style="width: 100%; height: calc(100vh - 56px - 1cm); position: relative; margin-bottom: 0;"></div>
-    <div class="reportar-btn-container" style="display: flex; gap: 12px; justify-content: center; align-items: center;">
-      <ion-button color="primary" expand="block" class="reportar-btn">
-        <ion-icon name="megaphone-outline" slot="start"></ion-icon>
-        Reportar
-      </ion-button>
-      <ion-button shape="round" color="primary" class="gps-btn" (click)="goToSanBernardo()">
-        <ion-icon name="locate-outline" slot="icon-only" style="color: #fff;"></ion-icon>
-      </ion-button>
-    </div>
+<ion-header>
+  <ion-toolbar color="danger">
+    <ion-title>Alerta</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="alerta-container">
+    <ion-icon name="alert-circle-outline" style="font-size: 48px; color: #e53935; margin-bottom: 16px;"></ion-icon>
+    <h2>¡Alerta de Seguridad!</h2>
+    <p>Se ha reportado una situación de emergencia en tu sector. Por favor, mantente atento a las indicaciones oficiales y toma precauciones.</p>
+  <ion-button expand="block" color="danger" routerLink="/alerta">Ver detalles</ion-button>
   </div>
+
 </ion-content>
 
 <ion-footer>
@@ -51,7 +28,7 @@
 
     <ion-buttons slot="end">
       <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-        <ion-button (click)="openMenu()">
+        <ion-button>
          <ion-icon name="menu-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
         </ion-button>
         <span style="font-size: 12px; color: #fff; margin-top: 0px; text-align: center; width: 100%;">Menú</span>
