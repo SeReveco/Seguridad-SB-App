@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
-import { AfterViewInit } from '@angular/core';
+
+import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
+import { AlertaService } from '../services/alerta.service';
 
 @Component({
   selector: 'app-home',
@@ -8,10 +9,10 @@ import * as L from 'leaflet';
   styleUrls: ['home.page.scss'],
   standalone: false,
 })
-export class HomePage {
+export class HomePage implements AfterViewInit {
+  map: any;
 
-
-  constructor() {}
+  constructor(private alertaService: AlertaService) {}
 
   openMenu() {
     const menu = document.querySelector('ion-menu');
@@ -19,8 +20,6 @@ export class HomePage {
       (menu as any).open();
     }
   }
-
-  map: any;
 
   ngAfterViewInit() {
     // Enfoque inicial en San Bernardo, sin límites
@@ -36,4 +35,11 @@ export class HomePage {
     }
   }
 
+  reportarAlerta() {
+    const mensaje = prompt('Describe la alerta:');
+    if (mensaje && mensaje.trim()) {
+      this.alertaService.agregarAlerta(mensaje.trim());
+      alert('¡Alerta reportada!');
+    }
+  }
 }

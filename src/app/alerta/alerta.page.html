@@ -16,23 +16,30 @@
 <ion-footer>
   <ion-toolbar color="primary">
   <div style="display: flex; flex-direction: row; align-items: flex-end; justify-content: center; width: 100%; gap: 1cm;">
-      <div style="display: flex; flex-direction: column; align-items: center;">
-        <ion-icon name="map-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
-        <span style="font-size: 12px; color: #fff; margin-top: 0px; text-align: center; width: 100%;">Mapa</span>
-      </div>
-      <div style="display: flex; flex-direction: column; align-items: center;">
-        <ion-icon name="megaphone-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
-        <span style="font-size: 12px; color: #fff; margin-top: 0px; text-align: center; width: 100%;">Denuncias</span>
-      </div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <ion-button fill="clear" routerLink="/home" style="display: flex; flex-direction: column; align-items: center;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <ion-icon name="map-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
+          <span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Mapa</span>
+        </div>
+      </ion-button>
     </div>
-
-    <ion-buttons slot="end">
-      <div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
-        <ion-button>
-         <ion-icon name="menu-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
-        </ion-button>
-        <span style="font-size: 12px; color: #fff; margin-top: 0px; text-align: center; width: 100%;">Menú</span>
-      </div>
-    </ion-buttons>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <ion-button fill="clear" routerLink="/alerta" style="display: flex; flex-direction: column; align-items: center;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <ion-icon name="megaphone-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
+          <span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Alerta</span>
+        </div>
+      </ion-button>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      <ion-button fill="clear" (click)="openMenu()" style="display: flex; flex-direction: column; align-items: center;">
+        <div style="display: flex; flex-direction: column; align-items: center;">
+          <ion-icon name="menu-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
+          <span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Menú</span>
+        </div>
+      </ion-button>
+    </div>
+  </div>
   </ion-toolbar>
 </ion-footer>

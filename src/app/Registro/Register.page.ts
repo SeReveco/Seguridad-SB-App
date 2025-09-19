@@ -8,4 +8,12 @@ import { Component } from '@angular/core';
 })
 export class RegisterPage {
   // Aquí va la lógica de la vista de registro
+  constructor() {}
+
+  openMenu() {
+    const menu = document.querySelector('ion-menu');
+    if (menu) {
+      (menu as any).open();
+    }
+  }
 }

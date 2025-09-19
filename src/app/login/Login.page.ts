@@ -8,4 +8,13 @@ import { Component } from '@angular/core';
 })
 export class LoginPage {
   // Aquí va la lógica de la vista de Login
+
+  constructor() {}
+
+  openMenu() {
+    const menu = document.querySelector('ion-menu');
+    if (menu) {
+      (menu as any).open();
+    }
+  }
 }
