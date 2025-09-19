@@ -8,17 +8,18 @@ const routes: Routes = [
   },
   {
     path: 'alerta',
-    loadChildren: () => import('./alerta/alerta.module').then(m => m.AlertaPageModule)
+    loadChildren: () => import('./alerta/Alerta.module').then(m => m.AlertaPageModule)
   },
   {
-    path: 'Login',
+    path: 'login',
     loadChildren: () => import('./login/Login.module').then(m => m.LoginPageModule)
   },
   {
-    path: 'Register',
+    path: 'register',
     loadChildren: () => import('./Registro/Register.module').then(m => m.RegisterPageModule)
   },
   {
+    //De donde se inicia la aplicacion
     path: '',
     redirectTo: 'home',
     pathMatch: 'full'

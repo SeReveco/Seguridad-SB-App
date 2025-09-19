@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { LoginPage } from './Login.page';
 
-@Component({
-  selector: 'app-Login',
-  standalone: true,
-  templateUrl: './Login.page.html',
-  styleUrls: ['./Login.page.scss'],
+import { LoginPageRoutingModule } from './Login-routing.module';
+
+
+@NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule
-  ]
+    IonicModule,
+    LoginPageRoutingModule
+  ],
+  declarations: [LoginPage]
 })
 export class LoginPageModule {}

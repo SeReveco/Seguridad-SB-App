@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { AlertaPage } from './Alerta.page';
 
-@Component({
-  selector: 'app-alerta',
-  standalone: true,
-  templateUrl: './alerta.page.html',
-  styleUrls: ['./alerta.page.scss'],
+import { AlertaPageRoutingModule } from './Alerta-routing.module';
+
+
+@NgModule({
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule
-  ]
+    IonicModule,
+    AlertaPageRoutingModule
+  ],
+  declarations: [AlertaPage]
 })
 export class AlertaPageModule {}

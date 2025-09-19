@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-Register',
   templateUrl: './Register.page.html',
-  styleUrls: ['./Register.page.scss']
+  styleUrls: ['./Register.page.scss'],
+  standalone: false,
 })
 export class RegisterPage {
   // Aquí va la lógica de la vista de registro

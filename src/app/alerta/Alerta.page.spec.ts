@@ -1,0 +1,24 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { IonicModule } from '@ionic/angular';
+
+import { AlertaPage } from './Alerta.page';
+
+describe('AlertaPage', () => {
+    let component: AlertaPage;
+    let fixture: ComponentFixture<AlertaPage>;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [AlertaPage],
+            imports: [IonicModule.forRoot()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(AlertaPage);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+});
