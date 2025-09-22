@@ -1,19 +1,39 @@
 <ion-header>
-  <ion-toolbar color="danger">
+	<ion-toolbar color="primary">
 		<ion-title>
 			<img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
-			Alerta
+			Solicitud
 		</ion-title>
-  </ion-toolbar>
+	</ion-toolbar>
 </ion-header>
-<ion-content>
-  <div class="alerta-container">
-    <ion-icon name="alert-circle-outline" style="font-size: 48px; color: #e53935; margin-bottom: 16px;"></ion-icon>
-    <h2>¡Alerta de Seguridad!</h2>
-    <p>Se ha reportado una situación de emergencia en tu sector. Por favor, mantente atento a las indicaciones oficiales y toma precauciones.</p>
-  <ion-button expand="block" color="danger" routerLink="/alerta">Ver detalles</ion-button>
-  </div>
 
+<ion-content class="ion-padding">
+	<form>
+		<ion-item>
+			<ion-label position="floating">Nombre completo</ion-label>
+			<ion-input type="text" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label position="floating">Rut</ion-label>
+			<ion-input type="text" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label position="floating">Telefono</ion-label>
+			<ion-input type="number" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label position="floating">Correo</ion-label>
+			<ion-input type="email" required></ion-input>
+		</ion-item>
+		<ion-item>
+			<ion-label position="floating">Descripción</ion-label>
+			<ion-textarea required autoGrow="true" style="white-space: pre-wrap;"></ion-textarea>
+		</ion-item>
+
+		<div style="margin-top: 24px; text-align: center;">
+			<ion-button expand="block" color="primary">Enviar Solicitud</ion-button>
+		</div>
+	</form>
 </ion-content>
 
 <ion-footer>

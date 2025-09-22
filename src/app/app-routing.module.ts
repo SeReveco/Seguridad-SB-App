@@ -19,9 +19,21 @@ const routes: Routes = [
     loadChildren: () => import('./Registro/Register.module').then(m => m.RegisterPageModule)
   },
   {
+    path: 'solicitud',
+    loadChildren: () => import('./Solicitud/Solicitud.module').then(m => m.SolicitudPageModule)
+  },  
+  {
+    path: 'motorisado',
+    loadChildren: () => import('./Motoridado/Motorisado.module').then(m => m.MotorisadoPageModule)
+  },
+  {
+    path: 'Movil',
+    loadChildren: () => import('./Movil/Movil.module').then(m => m.MovilPageModule)
+  },
+  {
     //De donde se inicia la aplicacion
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'login',
     pathMatch: 'full'
   },
 ];
