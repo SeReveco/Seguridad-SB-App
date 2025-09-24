@@ -27,7 +27,7 @@ const routes: Routes = [
     loadChildren: () => import('./Motoridado/Motorisado.module').then(m => m.MotorisadoPageModule)
   },
   {
-    path: 'Movil',
+    path: 'movil',
     loadChildren: () => import('./Movil/Movil.module').then(m => m.MovilPageModule)
   },
   {

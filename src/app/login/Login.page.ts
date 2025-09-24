@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ApiService } from '../services/api.service'; // 👈 Importa tu servicio
 
 @Component({
   selector: 'app-Login',
@@ -13,7 +14,10 @@ export class LoginPage {
   errorMessage: string = '';
   nombreUsuario: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private apiService: ApiService // 👈 Inyectamos el servicio
+  ) {}
 
   onLogin() {
     if (!this.email || !this.password) {
@@ -21,16 +25,31 @@ export class LoginPage {
       return;
     }
 
-    // Simulación: obtener nombre del usuario desde el correo
-    if (this.email.endsWith('@SanBernardo.cl')) {
-      this.nombreUsuario = this.email.split('@')[0];
-      localStorage.setItem('nombreUsuario', this.nombreUsuario);
-      this.router.navigate(['/movil']);
-    } else if (this.email.endsWith('@gmail.com') || this.email.endsWith('@hotmail.com')) {
-      this.router.navigate(['/home']);
-    } else {
-      this.errorMessage = 'Correo no válido.';
-    }
+    // ✅ Llamamos a Django para autenticar
+    this.apiService.login(this.email, this.password).subscribe({
+      next: (res: any) => {
+        // Guardamos tokens
+        localStorage.setItem('access', res.access);
+        localStorage.setItem('refresh', res.refresh);
+
+        // Extraer nombre de usuario del correo
+        this.nombreUsuario = this.email.split('@')[0];
+        localStorage.setItem('nombreUsuario', this.nombreUsuario);
+
+        console.log('Login exitoso ✅', res);
+
+        // Redirigir según el correo (tu lógica)
+        if (this.email.toLowerCase().endsWith('@sanbernardo.cl')) {
+          this.router.navigate(['/movil']);
+        } else {
+          this.router.navigate(['/home']);
+        }
+      },
+      error: (err) => {
+        console.error('Error en login ❌', err);
+        this.errorMessage = 'Credenciales inválidas.';
+      }
+    });
   }
 
   openMenu() {

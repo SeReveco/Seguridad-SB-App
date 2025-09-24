@@ -7,9 +7,16 @@ import { Component } from '@angular/core';
   standalone: false,
 })
 export class AlertaPage {
-  // Aquí va la lógica de la vista de alerta
+  alertas: any[] = [];
 
-  constructor() {}
+  constructor() {
+    this.cargarAlertas();
+  }
+
+  cargarAlertas() {
+    this.alertas = JSON.parse(localStorage.getItem('alertas') || '[]');
+  }
+
 
   openMenu() {
     const menu = document.querySelector('ion-menu');

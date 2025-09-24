@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar color="danger">
+  <ion-toolbar color="primary">
 		<ion-title>
 			<img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
 			Alerta
@@ -7,12 +7,23 @@
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <div class="alerta-container">
-    <ion-icon name="alert-circle-outline" style="font-size: 48px; color: #e53935; margin-bottom: 16px;"></ion-icon>
-    <h2>¡Alerta de Seguridad!</h2>
-    <p>Se ha reportado una situación de emergencia en tu sector. Por favor, mantente atento a las indicaciones oficiales y toma precauciones.</p>
-  <ion-button expand="block" color="danger" routerLink="/alerta">Ver detalles</ion-button>
-  </div>
+
+		<div class="alerta-lista-container" style="max-width: 600px; margin: 0 auto; padding: 16px 0;">
+			<h3 style="text-align:center; color:#222; margin-bottom: 12px;">Alertas registradas</h3>
+			<ion-list *ngIf="alertas.length > 0">
+				<ion-item *ngFor="let alerta of alertas">
+					<ion-label>
+						<div><b>Fecha:</b> {{ alerta.fecha }} <b>Hora:</b> {{ alerta.hora }}</div>
+						<div><b>Solicitante:</b> {{ alerta.solicitante }}</div>
+						<div><b>Teléfono:</b> {{ alerta.telefono }}</div>
+						<div><b>Dirección:</b> {{ alerta.direccion }}</div>
+						<div><b>Tipo:</b> {{ alerta.tipo }}</div>
+						<div><b>Descripción:</b> {{ alerta.descripcion }}</div>
+					</ion-label>
+				</ion-item>
+			</ion-list>
+			<div *ngIf="alertas.length === 0" style="text-align:center; color:#888;">No hay alertas registradas.</div>
+		</div>
 
 </ion-content>
 

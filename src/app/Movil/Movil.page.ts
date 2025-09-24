@@ -10,7 +10,6 @@ export class MovilPage {
   nombreUsuario: string = '';
 
   constructor() {
-    // Se puede obtener el nombre desde localStorage, un servicio, o parámetros de navegación
     const nombre = localStorage.getItem('nombreUsuario');
     if (nombre) {
       this.nombreUsuario = nombre;
