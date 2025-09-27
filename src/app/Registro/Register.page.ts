@@ -9,23 +9,37 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class RegisterPage {
-  username = '';
+  nombre = '';
+  apellido = '';
   password = '';
-  email = '';
-  first_name = '';
-  last_name = '';
+  confirmPassword = '';
+  correo = '';
+  telefono = '';
   error = '';
 
   constructor(private http: HttpClient, private router: Router) {}
 
   register() {
     this.error = '';
+    // Validación de contraseñas
+    if (this.password !== this.confirmPassword) {
+      this.error = 'Las contraseñas no coinciden';
+      return;
+    }
+    // Validación de teléfono
+    const telefonoValido =
+      (/^\+569\d{8}$/.test(this.telefono) && this.telefono.length === 12) ||
+      (/^9\d{8}$/.test(this.telefono) && this.telefono.length === 9);
+    if (!telefonoValido) {
+      this.error = 'El teléfono debe ser +569XXXXXXXX (12) o 9XXXXXXXX (9)';
+      return;
+    }
     this.http.post('http://localhost:8000/api/register/', {
-      username: this.username,
+      nombre: this.nombre,
+      apellido: this.apellido,
       password: this.password,
-      email: this.email,
-      first_name: this.first_name,
-      last_name: this.last_name
+      correo: this.correo,
+      telefono: this.telefono
     }).subscribe({
       next: () => {
         alert('Usuario registrado correctamente');

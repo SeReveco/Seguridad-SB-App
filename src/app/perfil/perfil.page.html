@@ -7,6 +7,33 @@
 	</ion-toolbar>
 </ion-header>
 
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Datos del Usuario</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-label>Nombre:</ion-label>
+          <ion-text>{{ usuario.nombre }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Teléfono:</ion-label>
+          <ion-text>{{ usuario.telefono }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Correo:</ion-label>
+          <ion-text>{{ usuario.correo }}</ion-text>
+        </ion-item>
+      </ion-list>
+      <div style="display: flex; flex-direction: row; gap: 16px; margin-top: 24px; justify-content: center;">
+        <ion-button color="primary" routerLink="/historial-alertas">Ver historial de alertas</ion-button>
+        <ion-button color="secondary" routerLink="/historial-solicitudes">Ver historial de solicitudes</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
 <ion-footer>
   <ion-toolbar color="primary">
     <div style="display: flex; flex-direction: row; align-items: flex-end; justify-content: center; width: 100%; gap: 1cm;">
