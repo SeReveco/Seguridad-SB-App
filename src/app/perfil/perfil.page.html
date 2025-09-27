@@ -1,49 +1,11 @@
-<ion-content id="main-content">
-  <div class="page-content">
-    <div id="map" style="width: 100%; height: calc(100vh - 60px); position: relative; margin-bottom: 0;"></div>
-    <div class="reportar-btn-container" style="display: flex; gap: 12px; justify-content: center; align-items: center;">
-      <ion-button color="primary" expand="block" class="reportar-btn" (click)="abrirFormulario()">
-        <ion-icon name="megaphone-outline" slot="start"></ion-icon>
-        Reportar
-      </ion-button>
-      <ion-button shape="round" color="primary" class="gps-btn" (click)="goToUbicacionActual()">
-        <ion-icon name="locate-outline" slot="icon-only" style="color: #fff;"></ion-icon>
-      </ion-button>
-    </div>
-
-   <ion-modal [isOpen]="mostrarFormulario" (didDismiss)="cerrarFormulario()">
-      <ng-template>
-        <div class="reportar-form-container" style="max-width: 500px; margin: 0 auto; padding: 16px; background: #fff; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
-          <form (ngSubmit)="enviarAlerta()" #alertaForm="ngForm">
-            
-            <ion-item>
-              <ion-label position="floating">Solicitante (opcional)</ion-label>
-              <ion-input [(ngModel)]="solicitante" name="solicitante" placeholder="Anónimo si se deja vacío"></ion-input>
-            </ion-item>
-
-            <ion-item>
-              <ion-label position="floating">Tipo de alerta</ion-label>
-              <ion-textarea [(ngModel)]="tipo" name="tipo" required></ion-textarea>
-            </ion-item>
-
-            <ion-item>
-              <ion-label position="floating">Descripción</ion-label>
-              <ion-textarea [(ngModel)]="descripcion" name="descripcion" required></ion-textarea>
-            </ion-item>
-          
-            <div style="display: flex; justify-content: center; margin-top: 16px;">
-              <ion-button type="submit" color="primary" [disabled]="!alertaForm.form.valid">
-                <ion-icon name="megaphone-outline" slot="start"></ion-icon>
-                Reportar Alerta</ion-button>
-              <ion-button color="medium" (click)="cerrarFormulario()" style="margin-left: 8px;">Cancelar</ion-button>
-            </div>
-
-          </form>
-        </div>
-      </ng-template>
-    </ion-modal>
-  </div>
-</ion-content>
+<ion-header>
+	<ion-toolbar color="primary">
+		<ion-title>
+			<img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
+			Perfil
+		</ion-title>
+	</ion-toolbar>
+</ion-header>
 
 <ion-footer>
   <ion-toolbar color="primary">

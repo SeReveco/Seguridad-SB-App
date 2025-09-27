@@ -31,6 +31,10 @@ const routes: Routes = [
     loadChildren: () => import('./Movil/Movil.module').then(m => m.MovilPageModule)
   },
   {
+    path: 'perfil',
+    loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
+  },
+  {
     //De donde se inicia la aplicacion
     path: '',
     redirectTo: 'login',
