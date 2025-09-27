@@ -6,13 +6,14 @@ import { FormsModule } from '@angular/forms';
 import { RegisterPageRoutingModule } from './Register-routing.module';
 import { RegisterPage } from './Register.page';
 
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    RegisterPageRoutingModule,
-    RegisterPage   // ✅ importamos el standalone, no declaramos
-  ]
+    RegisterPageRoutingModule
+  ],
+  declarations: [RegisterPage]
 })
 export class RegisterPageModule {}

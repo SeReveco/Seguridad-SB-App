@@ -52,10 +52,8 @@ export class LoginPage {
     });
   }
 
-  openMenu() {
-    const menu = document.querySelector('ion-menu');
-    if (menu) {
-      (menu as any).open();
-    }
+
+  goToHome() {
+    this.router.navigate(['/home']);
   }
 }

@@ -1,16 +1,12 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-Register',
   templateUrl: './Register.page.html',
   styleUrls: ['./Register.page.scss'],
-  standalone: true,                  // ✅ marca como standalone
-  imports: [CommonModule, FormsModule, IonicModule] // ✅ módulos necesarios
+  standalone: false
 })
 export class RegisterPage {
   username = '';

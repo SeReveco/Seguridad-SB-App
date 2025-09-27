@@ -31,7 +31,7 @@
 		</ion-item>
 		<div *ngIf="error" style="color: red; margin-top: 8px;">{{ error }}</div>
 		<ion-button expand="block" type="submit" color="primary" style="margin-top: 16px;">Registrarse</ion-button>
+		<ion-button expand="block" fill="clear" routerLink="/login">¿Ya tienes cuenta? Inicia sesión</ion-button>
 	</form>
-	<ion-button expand="block" fill="clear" (click)="goToLogin()">¿Ya tienes cuenta? Inicia sesión</ion-button>
 </ion-content>
 
