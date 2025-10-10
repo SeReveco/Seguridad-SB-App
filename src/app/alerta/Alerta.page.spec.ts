@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { AlertaPage } from './Alerta.page';
+import { AlertaPage } from './alerta.page';
 
 describe('AlertaPage', () => {
     let component: AlertaPage;

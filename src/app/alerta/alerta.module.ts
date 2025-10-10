@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { AlertaPage } from './Alerta.page';
+import { AlertaPage } from './alerta.page';
 
-import { AlertaPageRoutingModule } from './Alerta-routing.module';
+import { AlertaPageRoutingModule } from './alerta-routing.module';
 
 
 @NgModule({

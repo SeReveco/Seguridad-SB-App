@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: 'alerta',
-    loadChildren: () => import('./alerta/Alerta.module').then(m => m.AlertaPageModule)
+    loadChildren: () => import('./alerta/alerta.module').then(m => m.AlertaPageModule)
   },
   {
     path: 'login',
@@ -23,14 +23,6 @@ const routes: Routes = [
     loadChildren: () => import('./Solicitud/Solicitud.module').then(m => m.SolicitudPageModule)
   },  
   {
-    path: 'motorisado',
-    loadChildren: () => import('./Motoridado/Motorisado.module').then(m => m.MotorisadoPageModule)
-  },
-  {
-    path: 'movil',
-    loadChildren: () => import('./Movil/Movil.module').then(m => m.MovilPageModule)
-  },
-  {
     path: 'perfil',
     loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
   },
@@ -39,7 +31,11 @@ const routes: Routes = [
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'
+  },  {
+    path: 'trabajador',
+    loadChildren: () => import('./trabajador/trabajador.module').then( m => m.TrabajadorPageModule)
   },
+
 ];
 
 @NgModule({
