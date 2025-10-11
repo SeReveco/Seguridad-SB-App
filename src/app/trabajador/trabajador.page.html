@@ -1,0 +1,59 @@
+<ion-header>
+	<ion-toolbar color="primary">
+		<ion-title>Trabajador</ion-title>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+	<div style="text-align:center; margin-top: 24px;">
+		<h2>Bienvenido, {{ nombreUsuario || 'Trabajador' }}</h2>
+		<p style="font-size: 1.1rem;">Transporte seleccionado: <strong>{{ workOption || 'No seleccionado' }}</strong></p>
+
+		<!-- Si no existe una selección, mostrar botones para elegir -->
+		<div *ngIf="!workOption" style="margin-top: 18px;">
+			<ion-grid>
+				<ion-row class="vehicle-row">
+					<ion-col size="12" size-md="3">
+						<ion-card class="vehicle-card" button (click)="selectWorkOption('Bicicleta')">
+							<ion-card-content>
+								<ion-icon name="bicycle" class="vehicle-icon"></ion-icon>
+								<div class="vehicle-title">Bicicleta</div>
+							</ion-card-content>
+						</ion-card>
+					</ion-col>
+					<ion-col size="12" size-md="3">
+						<ion-card class="vehicle-card" button (click)="selectWorkOption('Auto')">
+							<ion-card-content>
+								<ion-icon name="car-sport" class="vehicle-icon"></ion-icon>
+								<div class="vehicle-title">Auto</div>
+							</ion-card-content>
+						</ion-card>
+					</ion-col>
+					<ion-col size="12" size-md="3">
+						<ion-card class="vehicle-card vehicle-moto" button (click)="selectWorkOption('Moto')">
+							<ion-card-content>
+								<ion-icon name="motorcycle" class="vehicle-icon"></ion-icon>
+								<div class="vehicle-title">Moto</div>
+							</ion-card-content>
+						</ion-card>
+					</ion-col>
+					<ion-col size="12" size-md="3">
+						<ion-card class="vehicle-card" button (click)="selectWorkOption('Camioneta')">
+							<ion-card-content>
+								<ion-icon name="truck" class="vehicle-icon"></ion-icon>
+								<div class="vehicle-title">Camioneta</div>
+							</ion-card-content>
+						</ion-card>
+					</ion-col>
+				</ion-row>
+			</ion-grid>
+		</div>
+
+		<!-- Si ya hay una selección, permitir cambiar o continuar -->
+		<div *ngIf="workOption" style="margin-top: 18px;">
+			<ion-button expand="block" color="medium" (click)="changeVehicle()">Cambiar vehículo</ion-button>
+			<ion-button expand="block" color="primary" style="margin-top:12px;" (click)="startTrabajo()">Continuar</ion-button>
+		</div>
+	</div>
+</ion-content>
+

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-Trabajador',
@@ -6,22 +7,35 @@ import { Component } from '@angular/core';
   styleUrls: ['trabajador.page.scss'],
   standalone: false,
 })
-export class TrabajadorPage {
-  trabajador: any[] = [];
+export class TrabajadorPage implements OnInit {
+  nombreUsuario: string | null = null;
+  workOption: string | null = null;
 
-  constructor() {
+  constructor(private router: Router) {}
+
+  ngOnInit() {
     this.cargarTrabajador();
   }
 
   cargarTrabajador() {
-    this.trabajador = JSON.parse(localStorage.getItem('trabajador') || '[]');
+    this.nombreUsuario = localStorage.getItem('nombreUsuario');
+    this.workOption = localStorage.getItem('workOption');
   }
 
+  selectWorkOption(option: string) {
+    this.workOption = option;
+    localStorage.setItem('workOption', option);
+    // Mantener en la página para que el usuario pueda cambiar o continuar
+  }
 
-  openMenu() {
-    const menu = document.querySelector('ion-menu');
-    if (menu) {
-      (menu as any).open();
-    }
+  // Ir a la pantalla principal cuando el trabajador esté listo
+  startTrabajo() {
+    this.router.navigate(['/home']);
+  }
+
+  // Permitir al usuario cambiar vehículo (resetear la selección)
+  changeVehicle() {
+    this.workOption = null;
+    localStorage.removeItem('workOption');
   }
 }

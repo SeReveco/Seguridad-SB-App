@@ -13,6 +13,7 @@ export class LoginPage {
   password: string = '';
   errorMessage: string = '';
   nombreUsuario: string = '';
+  loggedIn = false;
 
   constructor(
     private router: Router,
@@ -38,10 +39,13 @@ export class LoginPage {
 
         console.log('Login exitoso ✅', res);
 
-        // Redirigir según el correo (tu lógica)
+        this.loggedIn = true;
+
+        // Si es correo del dominio San Bernardo, redirigir a la página de trabajador
         if (this.email.toLowerCase().endsWith('@sanbernardo.cl')) {
-          this.router.navigate(['/movil']);
+          this.router.navigate(['/trabajador']);
         } else {
+          // Usuario normal -> ir a home
           this.router.navigate(['/home']);
         }
       },
