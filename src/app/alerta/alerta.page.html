@@ -8,22 +8,83 @@
 </ion-header>
 <ion-content>
 
-		<div class="alerta-lista-container" style="max-width: 600px; margin: 0 auto; padding: 16px 0;">
-			<h3 style="text-align:center; color:#222; margin-bottom: 12px;">Alertas registradas</h3>
-			<ion-list *ngIf="alertas.length > 0">
-				<ion-item *ngFor="let alerta of alertas">
-					<ion-label>
-						<div><b>Fecha:</b> {{ alerta.fecha }} <b>Hora:</b> {{ alerta.hora }}</div>
-						<div><b>Solicitante:</b> {{ alerta.solicitante }}</div>
-						<div><b>Teléfono:</b> {{ alerta.telefono }}</div>
-						<div><b>Dirección:</b> {{ alerta.direccion }}</div>
-						<div><b>Tipo:</b> {{ alerta.tipo }}</div>
-						<div><b>Descripción:</b> {{ alerta.descripcion }}</div>
-					</ion-label>
+	<!-- Formulario para crear alerta -->
+	<div style="max-width: 720px; margin: 16px auto; padding: 0 12px;">
+		<ion-card>
+			<ion-card-header>
+				<ion-card-title>Crear nueva alerta</ion-card-title>
+			</ion-card-header>
+			<ion-card-content>
+				<ion-item>
+					<ion-label position="stacked">Solicitante</ion-label>
+					<ion-input [(ngModel)]="solicitante" placeholder="Nombre del solicitante"></ion-input>
 				</ion-item>
-			</ion-list>
-			<div *ngIf="alertas.length === 0" style="text-align:center; color:#888;">No hay alertas registradas.</div>
-		</div>
+				<ion-item>
+					<ion-label position="stacked">Teléfono</ion-label>
+					<ion-input [(ngModel)]="telefono" placeholder="Teléfono"></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label position="stacked">Dirección</ion-label>
+					<ion-input [(ngModel)]="direccion" placeholder="Calle y número"></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label position="stacked">Villa o Población</ion-label>
+					<ion-input [(ngModel)]="villa" placeholder="Villa/ Población"></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label position="stacked">Cuadrante</ion-label>
+					<ion-input [(ngModel)]="cuadrante" placeholder="Cuadrante"></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label position="stacked">Requerimiento</ion-label>
+					<ion-input [(ngModel)]="requerimiento" placeholder="Tipo de requerimiento"></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label position="stacked">Clasificación</ion-label>
+					<ion-input [(ngModel)]="clasificacion" placeholder="Prioridad"></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label position="stacked">Detalle</ion-label>
+					<ion-textarea [(ngModel)]="detalle" placeholder="Detalle de la denuncia"></ion-textarea>
+				</ion-item>
+				<ion-item>
+					<ion-label position="stacked">Derivación</ion-label>
+					<ion-input [(ngModel)]="derivacion" placeholder="Derivación (ej. Carabineros 133)"></ion-input>
+				</ion-item>
+				<ion-item>
+					<ion-label position="stacked">Visibilidad en cámaras</ion-label>
+					<ion-select [(ngModel)]="visibilidadCamaras">
+						<ion-select-option value="Si">Si</ion-select-option>
+						<ion-select-option value="No">No</ion-select-option>
+					</ion-select>
+				</ion-item>
+				<div style="margin-top:12px; text-align:right;">
+					<ion-button color="primary" (click)="createAlerta()">Generar alerta</ion-button>
+				</div>
+			</ion-card-content>
+		</ion-card>
+	</div>
+
+	<!-- Lista de alertas guardadas -->
+	<div class="alerta-lista-container" style="max-width: 900px; margin: 0 auto; padding: 16px 0;">
+		<h3 style="text-align:center; color:#222; margin-bottom: 12px;">Alertas registradas</h3>
+		<ion-list *ngIf="alertas.length > 0">
+			<ion-item *ngFor="let alerta of alertas">
+				<ion-label>
+					<div><b>ID:</b> {{ alerta.ID }} <b>Fecha:</b> {{ alerta.FECHA }} <b>Hora:</b> {{ alerta.HORA_DEL_EVENTO }}</div>
+					<div><b>Solicitante:</b> {{ alerta.SOLICITANTE }}</div>
+					<div><b>Teléfono:</b> {{ alerta.TELEFONO }}</div>
+					<div><b>Dirección:</b> {{ alerta.DIRECCION }}</div>
+					<div><b>Villa/Población:</b> {{ alerta.VILLA_O_POBLACION }} <b>Cuadrante:</b> {{ alerta.CUADRANTE }}</div>
+					<div><b>Requerimiento:</b> {{ alerta.REQUERIMIENTO }} ({{ alerta.CLASIFICACION }})</div>
+					<div><b>Detalle:</b> {{ alerta.DETALLE }}</div>
+					<div><b>Derivación:</b> {{ alerta.DERIVACION }}</div>
+					<div><b>Visibilidad cámaras:</b> {{ alerta.VISIBILIDAD_EN_CAMARAS }}</div>
+				</ion-label>
+			</ion-item>
+		</ion-list>
+		<div *ngIf="alertas.length === 0" style="text-align:center; color:#888;">No hay alertas registradas.</div>
+	</div>
 
 </ion-content>
 

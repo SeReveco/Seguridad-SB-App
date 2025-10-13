@@ -1,6 +1,9 @@
 <ion-header>
 	<ion-toolbar color="primary">
-		<ion-title>Trabajador</ion-title>
+		<ion-title>
+			<img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
+			Trabajador
+		</ion-title>
 	</ion-toolbar>
 </ion-header>
 
@@ -21,6 +24,7 @@
 							</ion-card-content>
 						</ion-card>
 					</ion-col>
+
 					<ion-col size="12" size-md="3">
 						<ion-card class="vehicle-card" button (click)="selectWorkOption('Auto')">
 							<ion-card-content>
@@ -29,18 +33,21 @@
 							</ion-card-content>
 						</ion-card>
 					</ion-col>
+
 					<ion-col size="12" size-md="3">
 						<ion-card class="vehicle-card vehicle-moto" button (click)="selectWorkOption('Moto')">
-							<ion-card-content>
-								<ion-icon name="motorcycle" class="vehicle-icon"></ion-icon>
-								<div class="vehicle-title">Moto</div>
+							<ion-card-content class="vehicle-card-content">
+								<img src="assets/Img/Moto-Silueta.png" alt="Moto" class="vehicle-image" />
+								<div class="vehicle-title">Motosicleta</div>
 							</ion-card-content>
 						</ion-card>
 					</ion-col>
+
+
 					<ion-col size="12" size-md="3">
 						<ion-card class="vehicle-card" button (click)="selectWorkOption('Camioneta')">
 							<ion-card-content>
-								<ion-icon name="truck" class="vehicle-icon"></ion-icon>
+								<img src="assets/Img/Camioneta-Silueta.png" alt="Moto" class="vehicle-image" />
 								<div class="vehicle-title">Camioneta</div>
 							</ion-card-content>
 						</ion-card>
@@ -51,8 +58,27 @@
 
 		<!-- Si ya hay una selección, permitir cambiar o continuar -->
 		<div *ngIf="workOption" style="margin-top: 18px;">
-			<ion-button expand="block" color="medium" (click)="changeVehicle()">Cambiar vehículo</ion-button>
-			<ion-button expand="block" color="primary" style="margin-top:12px;" (click)="startTrabajo()">Continuar</ion-button>
+			<!-- Mostrar radio seleccionada o lista de radios -->
+			<div *ngIf="!radioSelected">
+				<p style="margin-bottom:8px;">Selecciona la radio (PORTATIL - CÓDIGO):</p>
+				<ion-list>
+					<ion-item *ngFor="let r of radios" button (click)="selectRadio(r)">
+						<ion-label>
+							<strong>{{ r.label }}</strong> — {{ r.code }}
+						</ion-label>
+					</ion-item>
+				</ion-list>
+			</div>
+			<div *ngIf="radioSelected">
+				<p>Radio seleccionada: <strong>{{ radioSelected.label }} - {{ radioSelected.code }}</strong></p>
+				<ion-button expand="block" color="medium" (click)="changeRadio()">Cambiar radio</ion-button>
+				<ion-button expand="block" color="primary" style="margin-top:12px;" (click)="startTrabajo()">Continuar</ion-button>
+			</div>
+			
+			<!-- Botón para cambiar vehículo -->
+			<div style="margin-top:12px;">
+				<ion-button expand="block" color="tertiary" (click)="changeVehicle()">Cambiar vehículo</ion-button>
+			</div>
 		</div>
 	</div>
 </ion-content>
