@@ -27,15 +27,14 @@ const routes: Routes = [
     loadChildren: () => import('./perfil/perfil.module').then( m => m.PerfilPageModule)
   },
   {
-    //De donde se inicia la aplicacion
-    path: '',
-    redirectTo: 'login',
-    pathMatch: 'full'
-  },  {
     path: 'trabajador',
     loadChildren: () => import('./trabajador/trabajador.module').then( m => m.TrabajadorPageModule)
   },
-
+  {
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full'
+  },
 ];
 
 @NgModule({

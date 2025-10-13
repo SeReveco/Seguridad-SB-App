@@ -1,13 +1,19 @@
 <ion-content id="main-content">
   <div class="page-content">
     <div id="map" style="width: 100%; height: calc(100vh - 60px); position: relative; margin-bottom: 0;"></div>
-    <div class="reportar-btn-container" style="display: flex; gap: 12px; justify-content: center; align-items: center;">
+   
+    <!-- Botón Reportar (centrado) -->
+    <div class="reportar-btn-container">
       <ion-button color="primary" expand="block" class="reportar-btn" (click)="abrirFormulario()">
         <ion-icon name="megaphone-outline" slot="start"></ion-icon>
         Reportar
       </ion-button>
+    </div>
+
+    <!-- Botón GPS (esquina derecha) -->
+    <div class="gps-btn-container">
       <ion-button shape="round" color="primary" class="gps-btn" (click)="goToUbicacionActual()">
-        <ion-icon name="locate-outline" slot="icon-only" style="color: #fff;"></ion-icon>
+        <ion-icon name="locate-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
 

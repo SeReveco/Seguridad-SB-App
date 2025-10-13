@@ -1,11 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { SolicitudPage } from './Solicitud.page';
-
+import { IonicModule } from '@ionic/angular';
 import { SolicitudPageRoutingModule } from './Solicitud-routing.module';
-
+import { SolicitudPage } from './Solicitud.page';
 
 @NgModule({
   imports: [

@@ -1,86 +1,106 @@
 <ion-header>
-	<ion-toolbar color="primary">
-		<ion-title>
-			<img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
-			Solicitud
-		</ion-title>
-	</ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-title>
+      <img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
+      Solicitud
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-	<form (ngSubmit)="enviarSolicitud()">
-		<ion-item>
-			<ion-label position="floating">Nombre</ion-label>
-			<ion-input [(ngModel)]="nombre" name="nombre" type="text" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Apellido</ion-label>
-			<ion-input [(ngModel)]="apellido" name="apellido" type="text" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Rut</ion-label>
-			<ion-input [(ngModel)]="rut" name="rut" type="text" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Correo</ion-label>
-			<ion-input [(ngModel)]="correo" name="correo" type="email" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Teléfono</ion-label>
-			<ion-input [(ngModel)]="telefono" name="telefono" type="tel" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Descripción</ion-label>
-			<ion-textarea [(ngModel)]="descripcion" name="descripcion" required autoGrow="true" style="white-space: pre-wrap;"></ion-textarea>
-		</ion-item>
-		<div *ngIf="error" style="color: red; margin-top: 8px;">{{ error }}</div>
-		<div style="margin-top: 24px; text-align: center;">
-			<ion-button expand="block" type="submit" color="primary">Enviar Solicitud</ion-button>
-		</div>
-	</form>
+  <form (ngSubmit)="enviarSolicitud()">
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input [(ngModel)]="nombre" name="nombre" type="text" required (ionInput)="onInputChange()"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="floating">Apellido</ion-label>
+      <ion-input [(ngModel)]="apellido" name="apellido" type="text" required (ionInput)="onInputChange()"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="floating">Rut</ion-label>
+      <ion-input [(ngModel)]="rut" name="rut" type="text" required (ionInput)="onInputChange()"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="floating">Correo</ion-label>
+      <ion-input [(ngModel)]="correo" name="correo" type="email" required (ionInput)="onInputChange()"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="floating">Teléfono</ion-label>
+      <ion-input [(ngModel)]="telefono" name="telefono" type="tel" required (ionInput)="onInputChange()"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Dirección</ion-label>
+      <ion-input [(ngModel)]="direccion" name="direccion" type="text" required (ionInput)="onInputChange()" placeholder="Ingresa tu dirección completa"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea [(ngModel)]="descripcion" name="descripcion" required autoGrow="true" style="white-space: pre-wrap;" (ionInput)="onInputChange()" placeholder="Describe detalladamente tu solicitud..."></ion-textarea>
+    </ion-item>
+    
+    <div *ngIf="error" style="color: red; margin-top: 8px; text-align: center; padding: 10px; background: rgba(255,0,0,0.1); border-radius: 8px;">
+      <ion-icon name="warning-outline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
+      {{ error }}
+    </div>
+    
+    <div style="margin-top: 24px; text-align: center;">
+      <ion-button 
+        expand="block" 
+        type="submit" 
+        color="primary"
+        [disabled]="loading">
+        <ion-spinner *ngIf="loading" name="crescent" style="margin-right: 8px;"></ion-spinner>
+        {{ loading ? 'Enviando...' : 'Enviar Solicitud' }}
+      </ion-button>
+    </div>
+  </form>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar color="primary">
     <div style="display: flex; flex-direction: row; align-items: flex-end; justify-content: center; width: 100%; gap: 1cm;">
-		
-        <div style="display: flex; flex-direction: column; align-items: center;">
-			<ion-button fill="clear" routerLink="/home" style="display: flex; flex-direction: column; align-items: center;">
-				<div style="display: flex; flex-direction: column; align-items: center;">
-					<ion-icon name="map-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
-					<span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Mapa</span>
-				</div>
-			</ion-button>
-		</div>
+      
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <ion-button fill="clear" routerLink="/home" style="display: flex; flex-direction: column; align-items: center;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <ion-icon name="map-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
+            <span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Mapa</span>
+          </div>
+        </ion-button>
+      </div>
 
-        <div style="display: flex; flex-direction: column; align-items: center;">
-			<ion-button fill="clear" routerLink="/alerta" style="display: flex; flex-direction: column; align-items: center;">
-				<div style="display: flex; flex-direction: column; align-items: center;">
-					<ion-icon name="megaphone-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
-					<span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Alerta</span>
-				</div>
-		    </ion-button>
-        </div>
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <ion-button fill="clear" routerLink="/alerta" style="display: flex; flex-direction: column; align-items: center;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <ion-icon name="megaphone-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
+            <span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Alerta</span>
+          </div>
+        </ion-button>
+      </div>
 
-				<div style="display: flex; flex-direction: column; align-items: center;">
-					<ion-button fill="clear" routerLink="/solicitud" style="display: flex; flex-direction: column; align-items: center;">
-						<div style="display: flex; flex-direction: column; align-items: center;">
-							<ion-icon name="document-text-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
-							<span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Solicitud</span>
-						</div>
-					</ion-button>
-				</div>
-		
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <ion-button fill="clear" routerLink="/solicitud" style="display: flex; flex-direction: column; align-items: center;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <ion-icon name="document-text-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
+            <span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Solicitud</span>
+          </div>
+        </ion-button>
+      </div>
 
-
-			<div style="display: flex; flex-direction: column; align-items: center;">
-				<ion-button fill="clear" (click)="openMenu()" style="display: flex; flex-direction: column; align-items: center;">
-					<div style="display: flex; flex-direction: column; align-items: center;">
-						<ion-icon name="menu-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
-						<span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Menú</span>
-					</div>
-				</ion-button>
-			</div>
+      <div style="display: flex; flex-direction: column; align-items: center;">
+        <ion-button fill="clear" (click)="openMenu()" style="display: flex; flex-direction: column; align-items: center;">
+          <div style="display: flex; flex-direction: column; align-items: center;">
+            <ion-icon name="menu-outline" slot="icon-only" style="color: #fff; font-size: 32px; margin-bottom: 0px;"></ion-icon>
+            <span style="font-size: 13px; color: #fff; margin-top: 2px; text-align: center; width: 100%;">Menú</span>
+          </div>
+        </ion-button>
+      </div>
 
     </div>
   </ion-toolbar>

@@ -1,55 +1,7 @@
- .gps-btn-container {
-   position: fixed;
-   right: 2cm;
-   bottom: 90px;
-   z-index: 1001;
- }
-
- .gps-btn {
-   width: 40px;
-   height: 40px;
-   border-radius: 50%;
-   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   padding: 0;
- }
- .reportar-btn-container {
-   position: fixed;
-   left: 0;
-   right: 0;
-   bottom: 80px; /* encima del footer */
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   gap: 16px;
-   z-index: 1000;
- }
-
-.reportar-btn {
-   width: calc(100vw - 4cm - 56px - 16px);
-   max-width: 400px;
-   margin: 0;
- }
-.gps-btn {
-   width: 40px;
-   height: 40px;
-   border-radius: 50%;
-   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   padding: 0;
- }
-ion-button.reportar-btn::part(native) {
-  color: #fff !important;
-  font-weight: bold;
+ion-content {
+  --background: #f8f9fa;
 }
-ion-button.reportar-btn {
-  color: #fff !important;
-  font-weight: bold;
-}
+
 #page-content {
   display: flex;
   flex-direction: column;
@@ -66,35 +18,320 @@ ion-button.reportar-btn {
 
 #map {
   flex: 1 1 auto;
-    width: 100vw;
-    min-height: 200px;
-    height: calc(100vh - 56px - 56px - 56px); /* header + reportar + footer (aprox) */
+  width: 100vw;
   min-height: 200px;
+  height: calc(100vh - 56px - 56px - 56px); /* header + reportar + footer (aprox) */
+  position: relative;
+  margin-bottom: 0;
 }
-#container {
-  text-align: center;
 
-  position: absolute;
+/* ===== BOTONES FLOTANTES ===== */
+.reportar-btn-container {
+  position: fixed;
   left: 0;
   right: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 80px; /* encima del footer */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  z-index: 1000;
+  padding: 0 16px;
 }
 
-#container strong {
-  font-size: 20px;
-  line-height: 26px;
-}
-
-#container p {
-  font-size: 16px;
-  line-height: 22px;
-
-  color: #8c8c8c;
-
+.reportar-btn {
+  width: calc(100vw - 4cm - 56px - 16px);
+  max-width: 400px;
   margin: 0;
+  --border-radius: 25px;
+  --box-shadow: 0 4px 16px rgba(56, 128, 255, 0.3);
+  font-weight: 600;
+  
+  &::part(native) {
+    color: #fff !important;
+    font-weight: bold;
+  }
 }
 
-#container a {
-  text-decoration: none;
+.gps-btn-container {
+  position: fixed;
+  right: 2cm;
+  bottom: 90px;
+  z-index: 1001;
+}
+
+.gps-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  --box-shadow: 0 4px 16px rgba(56, 128, 255, 0.3);
+  
+  ion-icon {
+    color: #fff !important;
+  }
+}
+
+/* ===== MODAL FORMULARIO ===== */
+.reportar-form-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  
+  ion-item {
+    --border-radius: 12px;
+    --background: #f8f9fa;
+    margin-bottom: 16px;
+    
+    ion-label {
+      color: #495057;
+      font-weight: 500;
+    }
+    
+    ion-input, ion-textarea {
+      --padding-start: 12px;
+      --padding-end: 12px;
+    }
+  }
+}
+
+/* ===== ESTILOS LEAFLET ===== */
+.ubicacion-actual-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+.alerta-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Personalizar popups de Leaflet */
+.leaflet-popup-content-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  
+  .leaflet-popup-content {
+    margin: 12px 16px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+    
+    strong {
+      color: #2f3542;
+      font-size: 14px;
+    }
+    
+    small {
+      color: #747d8c;
+      font-size: 12px;
+    }
+    
+    hr {
+      border: none;
+      border-top: 1px solid #e9ecef;
+      margin: 8px 0;
+    }
+  }
+}
+
+.leaflet-popup-tip {
+  background: #fff;
+}
+
+/* Corregir iconos de marcadores Leaflet */
+.leaflet-marker-icon {
+  margin-left: -8px !important;
+  margin-top: -8px !important;
+}
+
+/* ===== FOOTER ===== */
+ion-footer {
+  ion-toolbar {
+    --background: var(--ion-color-primary);
+    --min-height: 56px;
+    
+    div {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: center;
+      width: 100%;
+      gap: 1cm;
+    }
+  }
+}
+
+.footer-button {
+  --color: white;
+  --background: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  ion-icon {
+    font-size: 24px;
+    color: #fff;
+  }
+  
+  span {
+    font-size: 12px;
+    color: #fff;
+    margin-top: 2px;
+    text-align: center;
+    width: 100%;
+  }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .reportar-btn-container {
+    bottom: 70px;
+    padding: 0 12px;
+  }
+  
+  .gps-btn-container {
+    right: 1cm;
+    bottom: 80px;
+  }
+  
+  #map {
+    height: calc(100vh - 56px - 50px - 56px); /* Ajuste para móviles */
+  }
+  
+  .reportar-btn {
+    width: calc(100vw - 2cm - 48px - 12px);
+  }
+}
+
+@media (max-width: 480px) {
+  .reportar-btn-container {
+    gap: 12px;
+  }
+  
+  .gps-btn-container {
+    right: 0.5cm;
+  }
+  
+  .reportar-btn {
+    font-size: 14px;
+  }
+  
+  ion-footer {
+    ion-toolbar {
+      div {
+        gap: 0.5cm;
+      }
+    }
+  }
+}
+
+/* ===== ANIMACIONES ===== */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(10px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+.reportar-form-container {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.gps-btn:active {
+  animation: pulse 0.2s ease-in-out;
+}
+
+/* ===== ESTILOS ADICIONALES PARA MEJORA VISUAL ===== */
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+  
+  a {
+    background: #fff !important;
+    color: #495057 !important;
+    border: none !important;
+    
+    &:hover {
+      background: #f8f9fa !important;
+    }
+  }
+}
+
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  border-radius: 4px !important;
+  font-size: 10px !important;
+}
+
+/* Mejorar el contraste de los botones en modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .reportar-form-container {
+    background: #1e1e1e;
+    
+    ion-item {
+      --background: #2d2d2d;
+      
+      ion-label {
+        color: #e9ecef;
+      }
+    }
+  }
+  
+  .leaflet-popup-content-wrapper {
+    background: #1e1e1e;
+    
+    .leaflet-popup-content {
+      strong {
+        color: #f8f9fa;
+      }
+      
+      small {
+        color: #adb5bd;
+      }
+    }
+  }
+}
+
+/* Estados de hover y focus para mejor UX */
+ion-button {
+  transition: all 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* Scroll personalizado para el textarea */
+ion-textarea {
+  --highlight-color: var(--ion-color-primary);
+}
+
+/* Asegurar que el mapa ocupe todo el espacio disponible */
+.page-content {
+  height: 100%;
+  position: relative;
 }
