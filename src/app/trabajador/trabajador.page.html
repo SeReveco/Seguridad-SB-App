@@ -8,78 +8,62 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-	<div style="text-align:center; margin-top: 24px;">
-		<h2>Bienvenido, {{ nombreUsuario || 'Trabajador' }}</h2>
-		<p style="font-size: 1.1rem;">Transporte seleccionado: <strong>{{ workOption || 'No seleccionado' }}</strong></p>
+					<div style="text-align:center; margin-top: 24px;">
+					<h2>Bienvenido, {{ nombreUsuario || 'Trabajador' }}</h2>
+					<div class="selected-info" style="margin-top:6px;">
+						<p style="font-size: 1.05rem; margin: 0;">Rol seleccionado:</p>
+						<p style="font-size: 1.15rem; margin: 0; font-weight:700;">{{ todayRole || 'No seleccionado' }}</p>
+					</div>
 
-		<!-- Si no existe una selección, mostrar botones para elegir -->
-		<div *ngIf="!workOption" style="margin-top: 18px;">
-			<ion-grid>
-				<ion-row class="vehicle-row">
-					<ion-col size="12" size-md="3">
-						<ion-card class="vehicle-card" button (click)="selectWorkOption('Bicicleta')">
-							<ion-card-content>
-								<ion-icon name="bicycle" class="vehicle-icon"></ion-icon>
-								<div class="vehicle-title">Bicicleta</div>
-							</ion-card-content>
-						</ion-card>
-					</ion-col>
+					<div style="margin-top: 12px;">
+					<!-- Selector de rol de hoy: dos botones azules -->
+					<div class="role-buttons-wrapper">
+						<div class="role-buttons">
+							<ion-button class="role-btn" fill="solid" color="primary" [class.active]="todayRole === 'Conductor'" (click)="toggleRole('Conductor')" [attr.aria-pressed]="todayRole === 'Conductor'">Conductor</ion-button>
+							<ion-button class="role-btn" fill="solid" color="primary" [class.active]="todayRole === 'Inspector'" (click)="toggleRole('Inspector')" [attr.aria-pressed]="todayRole === 'Inspector'">Inspector</ion-button>
+						</div>
+					</div>
+					<div class="selected-info" style="margin-top:8px;">
+						<p style="font-size: 1.05rem; margin: 0;">Transporte seleccionado:</p>
+						<p style="font-size: 1.15rem; margin: 0; font-weight:700;">{{ workOption || 'No seleccionado' }}</p>
+					</div>
+					<ion-grid>
+						<ion-row class="vehicle-row">
+						<ion-col size="6" *ngFor="let v of vehicles">
+							<ion-card [class.selected]="workOption === v.key" [class.vehicle-moto]="v.key === 'Moto'" class="vehicle-card" button (click)="selectWorkOption(v.key)">
+								<ion-card-content class="vehicle-card-content">
+									<ion-icon *ngIf="v.icon" [name]="v.icon" class="vehicle-icon"></ion-icon>
+									<img *ngIf="v.img" [src]="v.img" [alt]="v.label" class="vehicle-image" />
+									<div class="vehicle-title">{{ v.label }}</div>
+								</ion-card-content>
+							</ion-card>
+						</ion-col>
+					</ion-row>
+				</ion-grid>
 
-					<ion-col size="12" size-md="3">
-						<ion-card class="vehicle-card" button (click)="selectWorkOption('Auto')">
-							<ion-card-content>
-								<ion-icon name="car-sport" class="vehicle-icon"></ion-icon>
-								<div class="vehicle-title">Auto</div>
-							</ion-card-content>
-						</ion-card>
-					</ion-col>
-
-					<ion-col size="12" size-md="3">
-						<ion-card class="vehicle-card vehicle-moto" button (click)="selectWorkOption('Moto')">
-							<ion-card-content class="vehicle-card-content">
-								<img src="assets/Img/Moto-Silueta.png" alt="Moto" class="vehicle-image" />
-								<div class="vehicle-title">Motosicleta</div>
-							</ion-card-content>
-						</ion-card>
-					</ion-col>
-
-
-					<ion-col size="12" size-md="3">
-						<ion-card class="vehicle-card" button (click)="selectWorkOption('Camioneta')">
-							<ion-card-content>
-								<img src="assets/Img/Camioneta-Silueta.png" alt="Moto" class="vehicle-image" />
-								<div class="vehicle-title">Camioneta</div>
-							</ion-card-content>
-						</ion-card>
-					</ion-col>
-				</ion-row>
-			</ion-grid>
-		</div>
-
-		<!-- Si ya hay una selección, permitir cambiar o continuar -->
-		<div *ngIf="workOption" style="margin-top: 18px;">
-			<!-- Mostrar radio seleccionada o lista de radios -->
-			<div *ngIf="!radioSelected">
-				<p style="margin-bottom:8px;">Selecciona la radio (PORTATIL - CÓDIGO):</p>
-				<ion-list>
-					<ion-item *ngFor="let r of radios" button (click)="selectRadio(r)">
-						<ion-label>
-							<strong>{{ r.label }}</strong> — {{ r.code }}
-						</ion-label>
+				<!-- Campo para escribir la frecuencia de radio -->
+				
+				<!-- Campo Número del vehículo: aparece después de seleccionar vehículo -->
+                    <div *ngIf="workOption" style="margin-top: 12px; max-width: 420px; margin-left: auto; margin-right: auto;">
+                    	<ion-item>
+                    		<ion-label position="stacked">Número del vehículo</ion-label>
+                    		<ion-input #vehicleNumberInput [(ngModel)]="vehicleNumber" placeholder="Ej: 1234" maxlength="10" (ngModelChange)="onVehicleNumberChange($event)"></ion-input>
+                    	</ion-item>
+					<div *ngIf="vehicleNumber && !isVehicleNumberValid()" style="color:#ff4d4f; font-size:0.9rem; margin-top:6px;">Número inválido</div>
+				</div>
+				
+				<div style="margin-top: 14px; max-width: 420px; margin-left: auto; margin-right: auto;">
+					<ion-item>
+						<ion-label position="stacked">Frecuencia de radio</ion-label>
+						<ion-input [(ngModel)]="radioFrequency" (ngModelChange)="onFrequencyChange($event)" placeholder="Ej: 61 / 102 / 628"></ion-input>
 					</ion-item>
-				</ion-list>
+					<div *ngIf="radioFrequency && !isFrequencyValid()" style="color:#ff4d4f; font-size:0.9rem; margin-top:6px;">Formato inválido de frecuencia</div>
+				</div>
+
+				<div style="margin-top:12px; max-width: 420px; margin-left: auto; margin-right: auto;">
+					<ion-button expand="block" color="primary" (click)="startTrabajo()" [disabled]="!isReadyToStart()">Iniciar turno</ion-button>
+				</div>
 			</div>
-			<div *ngIf="radioSelected">
-				<p>Radio seleccionada: <strong>{{ radioSelected.label }} - {{ radioSelected.code }}</strong></p>
-				<ion-button expand="block" color="medium" (click)="changeRadio()">Cambiar radio</ion-button>
-				<ion-button expand="block" color="primary" style="margin-top:12px;" (click)="startTrabajo()">Continuar</ion-button>
-			</div>
-			
-			<!-- Botón para cambiar vehículo -->
-			<div style="margin-top:12px;">
-				<ion-button expand="block" color="tertiary" (click)="changeVehicle()">Cambiar vehículo</ion-button>
-			</div>
-		</div>
 	</div>
 </ion-content>
 

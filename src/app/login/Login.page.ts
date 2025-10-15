@@ -51,6 +51,22 @@ export class LoginPage {
         console.log('Login exitoso. Usuario:', response.user);
         
         setTimeout(() => {
+          // Guardar el nombre y email en localStorage para usar en otras vistas
+          try {
+            localStorage.setItem('nombreUsuario', this.nombreUsuario || '');
+            localStorage.setItem('email', this.email || '');
+          } catch (e) {
+            console.warn('No se pudo guardar en localStorage:', e);
+          }
+
+          // Si el correo pertenece a un dominio institucional, forzamos a /trabajador
+          const institucionalDomains = ['sanbernardo.cl']; // puedes añadir más dominios aquí
+          const domain = this.email.split('@')[1] || '';
+          if (institucionalDomains.includes(domain.toLowerCase())) {
+            this.router.navigate(['/trabajador']);
+            return;
+          }
+
           this.redirectByRole(response.user);
         }, 1500);
         
@@ -105,5 +121,11 @@ export class LoginPage {
     this.email = 'admin@sanbernardo.cl';
     this.password = 'password123';
     this.errorMessage = 'Credenciales de prueba cargadas. Haz click en Ingresar.';
+  }
+
+  fillInstitutionalTestCredentials() {
+    this.email = 'prueba@sanbernardo.cl';
+    this.password = 'test1234';
+    this.errorMessage = 'Credenciales institucionales de prueba cargadas. Haz click en Ingresar.';
   }
 }

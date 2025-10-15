@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonInput } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 
@@ -11,6 +12,13 @@ import { ToastController } from '@ionic/angular';
 export class TrabajadorPage implements OnInit {
   nombreUsuario: string | null = null;
   workOption: string | null = null;
+  todayRole: string | null = null;
+  vehicles: Array<{ key: string; label: string; icon?: string; img?: string }> = [
+    { key: 'Auto', label: 'Auto', icon: 'car-sport' },
+    { key: 'Moto', label: 'Motosicleta', img: 'assets/Img/Moto-Silueta.png' },
+    { key: 'Camioneta', label: 'Camioneta', img: 'assets/Img/Camioneta-Silueta.png' },
+    { key: 'Bicicleta', label: 'Bicicleta', icon: 'bicycle' },
+  ];
   // Lista de radios disponibles
   radios: Array<{ label: string; code: string }> = [
     { label: '61', code: 'SC7' },
@@ -43,11 +51,20 @@ export class TrabajadorPage implements OnInit {
     { label: 'ECO4', code: 'SC12' },
   ];
   radioSelected: { label: string; code: string } | null = null;
+  radioFrequency: string | null = null;
+  vehicleNumber: string | null = null;
+  @ViewChild('vehicleNumberInput', { static: false }) vehicleInput: IonInput | undefined;
 
   constructor(private router: Router, private toastCtrl: ToastController) {}
 
   ngOnInit() {
     this.cargarTrabajador();
+    const freq = localStorage.getItem('radioFrequency');
+    if (freq) this.radioFrequency = freq;
+    const role = localStorage.getItem('todayRole');
+    if (role) this.todayRole = role;
+    const vnum = localStorage.getItem('vehicleNumber');
+    if (vnum) this.vehicleNumber = vnum;
   }
 
   cargarTrabajador() {
@@ -67,22 +84,100 @@ export class TrabajadorPage implements OnInit {
     this.workOption = option;
     localStorage.setItem('workOption', option);
     // Mantener en la página para que el usuario pueda cambiar o continuar
+    // esperar que el *ngIf renderice el input y luego darle foco
+    setTimeout(() => {
+      try {
+        this.vehicleInput?.setFocus();
+      } catch (e) {
+        // ignore
+      }
+    }, 200);
+  }
+
+  // Manejo del rol seleccionado
+  onRoleChange(ev: any) {
+    // ev.detail ? ev.detail.value : ev
+    const value = ev && ev.detail && ev.detail.value ? ev.detail.value : ev;
+    this.todayRole = value;
+    if (this.todayRole) localStorage.setItem('todayRole', this.todayRole);
+  }
+
+  // Establecer rol mediante botones
+  setRole(role: string) {
+    this.todayRole = role;
+    if (role) localStorage.setItem('todayRole', role);
+  }
+
+  toggleRole(role: string) {
+    if (this.todayRole === role) {
+      // deseleccionar
+      this.todayRole = null;
+      localStorage.removeItem('todayRole');
+    } else {
+      this.todayRole = role;
+      localStorage.setItem('todayRole', role);
+    }
+  }
+
+  // Número del vehículo
+  onVehicleNumberChange(val: string) {
+    this.vehicleNumber = val;
+    if (val) localStorage.setItem('vehicleNumber', val);
   }
 
   // Ir a la pantalla principal cuando el trabajador esté listo
   startTrabajo() {
-    // Si el trabajador tomó un Auto y hay radio seleccionada, generar asignación
-    if (this.workOption && this.workOption.toLowerCase().includes('auto') && this.radioSelected) {
-      this.generateAsignacion();
-      this.presentToast('Asignación generada y guardada.');
+    // Guardar la frecuencia y la selección en localStorage
+    if (this.radioFrequency) {
+      localStorage.setItem('radioFrequency', this.radioFrequency);
     }
+    if (this.workOption) {
+      localStorage.setItem('workOption', this.workOption);
+    }
+
+    // Generar asignación siempre que tengamos lo necesario
+    this.generateAsignacion();
+    this.presentToast('Turno iniciado. Datos guardados.');
+    // Navegar al mapa (home) para iniciar operaciones en campo
     this.router.navigate(['/home']);
+  }
+
+  // Validar frecuencia: permitir números, letras y algunos símbolos sencillos (ej: '/', '-') y longitud 2-6
+  isFrequencyValid(): boolean {
+    if (!this.radioFrequency) return false;
+    const v = this.radioFrequency.trim();
+    return /^[0-9A-Za-z\/-]{2,6}$/.test(v);
+  }
+
+  // Determina si se puede iniciar el turno
+  isReadyToStart(): boolean {
+    // requires role, workOption, valid frequency and optionally valid vehicle number when vehicle selected
+    if (!this.todayRole) return false;
+    if (!this.workOption) return false;
+    if (!this.isFrequencyValid()) return false;
+    // if vehicle selected, ensure vehicleNumber is present and valid
+    if (this.workOption && !this.isVehicleNumberValid()) return false;
+    return true;
+  }
+
+  // Validar número de vehículo: permitir números y letras, 1-10 caracteres
+  isVehicleNumberValid(): boolean {
+    if (!this.workOption) return true; // no requiere número si no hay vehículo
+    if (!this.vehicleNumber) return false;
+    const v = this.vehicleNumber.trim();
+    return /^[0-9A-Za-z-]{1,10}$/.test(v);
   }
 
   // Seleccionar radio
   selectRadio(r: { label: string; code: string }) {
     this.radioSelected = r;
     localStorage.setItem('radioSelected', JSON.stringify(r));
+  }
+
+  // Permitir al usuario escribir la frecuencia manualmente
+  onFrequencyChange(value: string) {
+    this.radioFrequency = value;
+    localStorage.setItem('radioFrequency', value);
   }
 
   // Cambiar radio (reset)
@@ -105,6 +200,8 @@ export class TrabajadorPage implements OnInit {
       HORA: hora,
       CONDUCTOR: this.nombreUsuario || '-',
       MOVIL: this.workOption || '-',
+      NUMERO_MOVIL: this.vehicleNumber || '',
+      ROL: this.todayRole || '',
       PORTATIL: this.radioSelected?.label || '',
       CODIGO_RADIO: this.radioSelected?.code || '',
       LLAVES: '',

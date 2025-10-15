@@ -2,7 +2,7 @@ ion-card.vehicle-card {
 	--background: rgba(255,255,255,0.06);
 	border-radius: 12px;
 	text-align: center;
-	padding: 18px 8px;
+	padding: 12px 8px;
 	cursor: pointer;
 	transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
@@ -25,7 +25,133 @@ ion-card.vehicle-card:hover {
 }
 
 .vehicle-row {
-	gap: 12px;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 4px; /* menos separación entre tarjetas */
+	justify-items: center;
+}
+
+.role-buttons-wrapper {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 6px;
+}
+
+.role-buttons ion-button {
+	margin: 0 6px;
+	min-width: 120px;
+	--border-radius: 12px;
+	--background: #ffffff;
+	height: 110px; /* ligeramente más compacto */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 10px;
+	text-align: center;
+	font-weight: 700;
+	color: #000000;
+	border: 1px solid rgba(0,0,0,0.06);
+	box-shadow: none;
+	transform: none;
+	transition: border 0.12s ease, background 0.12s ease;
+}
+
+/* Forzar que los botones estén en una sola línea y centrados */
+.role-buttons {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.selected-info {
+	display: block;
+	margin-bottom: 6px;
+}
+
+.role-buttons .role-btn {
+	margin: 0 6px;
+	min-width: 120px;
+	--border-radius: 12px;
+	--background: #ffffff; /* fondo blanco */
+	height: 110px; /* compacto */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 10px;
+	text-align: center;
+	font-weight: 700;
+	color: #000000; /* texto negro */
+	border: 1px solid rgba(0,0,0,0.06);
+	box-shadow: none;
+	transform: none;
+	transition: border 0.12s ease, background 0.12s ease;
+}
+
+.role-buttons .role-btn.active {
+	/* flat active: borde azul pero sin elevación ni movimiento */
+	box-shadow: none;
+	transform: none;
+	border: 2px solid var(--ion-color-primary) !important;
+	background: #ffffff;
+}
+
+/* Regla extra de alta especificidad por si Ionic aplica estilos internos */
+ion-button.role-btn.active {
+	border: 2px solid var(--ion-color-primary) !important;
+}
+
+ion-col[size="6"] {
+	box-sizing: border-box;
+	padding: 4px; /* menos padding para que estén más juntas */
+	width: 100%;
+}
+
+ion-card.vehicle-card {
+	max-width: 260px; /* reducir anchura máxima para que las tarjetas queden más juntas */
+	width: 100%;
+	height: 132px; /* altura ligeramente menor */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden; /* evita que contenido sobresalga */
+}
+
+/* Estilo para tarjeta seleccionada */
+ion-card.vehicle-card.selected {
+	border: 2px solid var(--ion-color-primary);
+	box-shadow: 0 8px 20px rgba(0,123,255,0.18); /* sombra azul para tarjetas seleccionadas */
+	transform: translateY(-2px) scale(1.03);
+}
+
+ion-card.vehicle-card {
+	transition: transform 0.12s ease, box-shadow 0.12s ease, border 0.12s ease;
+}
+
+/* Ajustes para móviles: mantener 2x2 pero con tarjetas más compactas */
+@media (max-width: 420px) {
+	.vehicle-row {
+		gap: 4px;
+	}
+
+	ion-card.vehicle-card {
+		padding: 8px 4px;
+		max-width: 150px;
+		height: 110px; /* altura fija menor en móvil */
+	}
+
+	.vehicle-icon {
+		font-size: 32px;
+	}
+
+	.vehicle-image {
+		width: 32px;
+		height: 32px;
+	}
+
+	.vehicle-title {
+		font-size: 0.95rem;
+	}
 }
 
 .vehicle-moto {
@@ -53,16 +179,23 @@ ion-card.vehicle-card:hover {
 }
 
 	.vehicle-card-content {
-		display:flex;
-		align-items:center;
-		justify-content:center;
-		gap:10px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 4px;
 	}
 
+.vehicle-input-wrapper {
+	max-width: 420px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
 	.vehicle-image {
-		width:48px;
-		height:48px;
-		object-fit:contain;
+		width: 42px;
+		height: 42px;
+		object-fit: contain;
 	}
 
 .radio-list ion-item {
