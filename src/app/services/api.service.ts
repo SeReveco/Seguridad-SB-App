@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
 import { Usuario, LoginResponse } from '../models/usuario.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
   private apiUrl = environment.apiUrl;
@@ -27,20 +27,22 @@ export class ApiService {
   }
 
   // ========== AUTHENTICATION ==========
-  
+
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(
-      `${this.apiUrl}/api/ionic/login/`,
-      { email, password },
-      { headers: this.getHeaders() }
-    ).pipe(
-      tap(response => {
-        if (response.success && response.user) {
-          localStorage.setItem('currentUser', JSON.stringify(response.user));
-          this.currentUserSubject.next(response.user);
-        }
-      })
-    );
+    return this.http
+      .post<LoginResponse>(
+        `${this.apiUrl}/api/ionic/login/`,
+        { email, password },
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        tap((response) => {
+          if (response.success && response.user) {
+            localStorage.setItem('currentUser', JSON.stringify(response.user));
+            this.currentUserSubject.next(response.user);
+          }
+        })
+      );
   }
 
   logout(): void {
@@ -56,14 +58,21 @@ export class ApiService {
     return this.currentUserSubject.value !== null;
   }
 
+  // Agrega este método en la sección AUTHENTICATION del ApiService
+  register(userData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/api/register/`, userData, {
+      headers: this.getHeaders(),
+    });
+  }
+
   // ========== DASHBOARD ==========
-  
+
   getDashboardStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/ionic/dashboard/stats/`);
   }
 
   // ========== USUARIOS ==========
-  
+
   getUsuarios(): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/usuarios/`);
   }
@@ -73,11 +82,15 @@ export class ApiService {
   }
 
   createUsuario(usuario: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/usuarios/`, usuario, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/api/usuarios/`, usuario, {
+      headers: this.getHeaders(),
+    });
   }
 
   updateUsuario(id: number, usuario: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/api/usuarios/${id}/`, usuario, { headers: this.getHeaders() });
+    return this.http.put(`${this.apiUrl}/api/usuarios/${id}/`, usuario, {
+      headers: this.getHeaders(),
+    });
   }
 
   deleteUsuario(id: number): Observable<any> {
@@ -90,13 +103,15 @@ export class ApiService {
   }
 
   // ========== VEHÍCULOS ==========
-  
+
   getVehiculos(): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/ionic/vehiculos/`);
   }
 
   createVehiculo(vehiculo: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/ionic/vehiculos/`, vehiculo, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/api/ionic/vehiculos/`, vehiculo, {
+      headers: this.getHeaders(),
+    });
   }
 
   getTiposVehiculos(): Observable<any> {
@@ -104,17 +119,19 @@ export class ApiService {
   }
 
   // ========== DENUNCIAS ==========
-  
+
   getDenuncias(): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/ionic/denuncias/`);
   }
 
   createDenuncia(denuncia: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/ionic/denuncias/`, denuncia, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/api/ionic/denuncias/`, denuncia, {
+      headers: this.getHeaders(),
+    });
   }
 
   // ========== REQUERIMIENTOS ==========
-  
+
   getRequerimientos(): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/requerimientos/`);
   }
@@ -124,11 +141,17 @@ export class ApiService {
   }
 
   createRequerimiento(requerimiento: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/requerimientos/`, requerimiento, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/api/requerimientos/`, requerimiento, {
+      headers: this.getHeaders(),
+    });
   }
 
   updateRequerimiento(id: number, requerimiento: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/api/requerimientos/${id}/`, requerimiento, { headers: this.getHeaders() });
+    return this.http.put(
+      `${this.apiUrl}/api/requerimientos/${id}/`,
+      requerimiento,
+      { headers: this.getHeaders() }
+    );
   }
 
   deleteRequerimiento(id: number): Observable<any> {
@@ -140,13 +163,15 @@ export class ApiService {
   }
 
   // ========== CATALOGOS ==========
-  
+
   getFamilias(): Observable<any> {
     return this.http.get(`${this.apiUrl}/api/familias/`);
   }
 
   createFamilia(familia: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/familias/`, familia, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/api/familias/`, familia, {
+      headers: this.getHeaders(),
+    });
   }
 
   deleteFamilia(id: number): Observable<any> {
@@ -162,7 +187,9 @@ export class ApiService {
   }
 
   createGrupo(grupo: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/grupos/`, grupo, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/api/grupos/`, grupo, {
+      headers: this.getHeaders(),
+    });
   }
 
   deleteGrupo(id: number): Observable<any> {
@@ -178,7 +205,9 @@ export class ApiService {
   }
 
   createSubgrupo(subgrupo: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/subgrupos/`, subgrupo, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/api/subgrupos/`, subgrupo, {
+      headers: this.getHeaders(),
+    });
   }
 
   deleteSubgrupo(id: number): Observable<any> {
@@ -194,7 +223,7 @@ export class ApiService {
   }
 
   // ========== UTILIDAD ==========
-  
+
   handleError(error: any): string {
     if (error.error && error.error.error) {
       return error.error.error;

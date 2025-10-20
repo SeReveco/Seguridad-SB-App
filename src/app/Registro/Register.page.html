@@ -1,41 +1,75 @@
 <ion-header>
-	<ion-toolbar color="primary">
-		<ion-title>
-			<img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
-			Registrarse
-		</ion-title>
-	</ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-title>
+      <img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
+      Registrarse
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-	<form (ngSubmit)="register()">
-		<ion-item>
-			<ion-label position="floating">Nombre</ion-label>
-			<ion-input [(ngModel)]="nombre" name="nombre" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Apellido</ion-label>
-			<ion-input [(ngModel)]="apellido" name="apellido" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Correo</ion-label>
-			<ion-input [(ngModel)]="correo" name="correo" type="email" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Teléfono</ion-label>
-			<ion-input [(ngModel)]="telefono" name="telefono" type="tel" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Contraseña</ion-label>
-			<ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
-		</ion-item>
-		<ion-item>
-			<ion-label position="floating">Repetir Contraseña</ion-label>
-			<ion-input [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required></ion-input>
-		</ion-item>
-		<div *ngIf="error" style="color: red; margin-top: 8px;">{{ error }}</div>
-		<ion-button expand="block" type="submit" color="primary" style="margin-top: 16px;">Registrarse</ion-button>
-		<ion-button expand="block" fill="clear" routerLink="/login">¿Ya tienes cuenta? Inicia sesión</ion-button>
-	</form>
-</ion-content>
+  <form (ngSubmit)="register()">
+    <!-- Campo RUT -->
+    <ion-item>
+      <ion-label position="floating">RUT</ion-label>
+      <ion-input [(ngModel)]="rut_usuario" name="rut_usuario" 
+                placeholder="12345678-9" required></ion-input>
+    </ion-item>
 
+    <!-- Campo Nombre -->
+    <ion-item>
+      <ion-label position="floating">Nombre</ion-label>
+      <ion-input [(ngModel)]="nombre_usuario" name="nombre_usuario" required></ion-input>
+    </ion-item>
+
+    <!-- Campo Apellido Paterno -->
+    <ion-item>
+      <ion-label position="floating">Apellido Paterno</ion-label>
+      <ion-input [(ngModel)]="apellido_pat_usuario" name="apellido_pat_usuario" required></ion-input>
+    </ion-item>
+
+    <!-- Campo Apellido Materno -->
+    <ion-item>
+      <ion-label position="floating">Apellido Materno</ion-label>
+      <ion-input [(ngModel)]="apellido_mat_usuario" name="apellido_mat_usuario" required></ion-input>
+    </ion-item>
+
+    <!-- Campo Correo -->
+    <ion-item>
+      <ion-label position="floating">Correo Electrónico</ion-label>
+      <ion-input [(ngModel)]="correo_electronico_usuario" name="correo_electronico_usuario" 
+                type="email" required></ion-input>
+    </ion-item>
+
+    <!-- Campo Teléfono -->
+    <ion-item>
+      <ion-label position="floating">Teléfono Móvil</ion-label>
+      <ion-input [(ngModel)]="telefono_movil_usuario" name="telefono_movil_usuario" 
+                type="tel" placeholder="+56912345678" required></ion-input>
+    </ion-item>
+
+    <!-- Campo Contraseña -->
+    <ion-item>
+      <ion-label position="floating">Contraseña</ion-label>
+      <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
+    </ion-item>
+
+    <!-- Campo Confirmar Contraseña -->
+    <ion-item>
+      <ion-label position="floating">Repetir Contraseña</ion-label>
+      <ion-input [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required></ion-input>
+    </ion-item>
+
+    <!-- Mensaje de error -->
+    <div *ngIf="error" style="color: red; margin-top: 8px;">{{ error }}</div>
+
+    <!-- Botones -->
+    <ion-button expand="block" type="submit" color="primary" style="margin-top: 16px;">
+      Registrarse
+    </ion-button>
+
+    <ion-button expand="block" fill="clear" routerLink="/login">
+      ¿Ya tienes cuenta? Inicia sesión
+    </ion-button>
+  </form>
+</ion-content>

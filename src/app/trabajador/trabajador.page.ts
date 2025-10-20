@@ -13,11 +13,11 @@ export class TrabajadorPage implements OnInit {
   nombreUsuario: string | null = null;
   workOption: string | null = null;
   todayRole: string | null = null;
-  vehicles: Array<{ key: string; label: string; icon?: string; img?: string }> = [
-    { key: 'Auto', label: 'Auto', icon: 'car-sport' },
-    { key: 'Moto', label: 'Motosicleta', img: 'assets/Img/Moto-Silueta.png' },
+  vehicles: Array<{ key: string; label: string; icon?: string; img?: string; faIcon?: string }> = [
+    { key: 'Auto', label: 'Auto', faIcon: 'fas fa-car' },
+    { key: 'Moto', label: 'Motocicleta', faIcon: 'fas fa-motorcycle' },
     { key: 'Camioneta', label: 'Camioneta', img: 'assets/Img/Camioneta-Silueta.png' },
-    { key: 'Bicicleta', label: 'Bicicleta', icon: 'bicycle' },
+    { key: 'Bicicleta', label: 'Bicicleta', faIcon: 'fas fa-bicycle' },
   ];
   // Lista de radios disponibles
   radios: Array<{ label: string; code: string }> = [

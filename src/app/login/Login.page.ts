@@ -9,6 +9,7 @@ import { LoginResponse } from '../models/usuario.model';
   styleUrls: ['./login.page.scss'],
   standalone: false
 })
+
 export class LoginPage {
   email: string = '';
   password: string = '';
@@ -55,16 +56,9 @@ export class LoginPage {
           try {
             localStorage.setItem('nombreUsuario', this.nombreUsuario || '');
             localStorage.setItem('email', this.email || '');
+            localStorage.setItem('userRole', response.user?.nombre_rol || '');
           } catch (e) {
             console.warn('No se pudo guardar en localStorage:', e);
-          }
-
-          // Si el correo pertenece a un dominio institucional, forzamos a /trabajador
-          const institucionalDomains = ['sanbernardo.cl']; // puedes añadir más dominios aquí
-          const domain = this.email.split('@')[1] || '';
-          if (institucionalDomains.includes(domain.toLowerCase())) {
-            this.router.navigate(['/trabajador']);
-            return;
           }
 
           this.redirectByRole(response.user);
@@ -95,14 +89,22 @@ export class LoginPage {
 
   private redirectByRole(user: any) {
     console.log('Redirigiendo usuario con rol:', user.nombre_rol);
+    console.log('ID del rol:', user.id_rol);
     
-    if (user.es_administrador || user.es_operador) {
+    // Ciudadano (id=3) → va al home
+    if (user.id_rol === 3) {
+      this.router.navigate(['/home']);
+    } 
+    // Administrador (id=1), Conductor (id=4), Inspector (id=5) → van a trabajador
+    else if (user.id_rol === 1 || user.id_rol === 4 || user.id_rol === 5) {
       this.router.navigate(['/trabajador']);
-    } else if (user.es_conductor) {
-      this.router.navigate(['/conductor']);
-    } else if (user.es_ciudadano) {
-      this.router.navigate(['/ciudadano']);
-    } else {
+    }
+    // Operador (id=2) también va a trabajador por si acaso
+    else if (user.id_rol === 2) {
+      this.router.navigate(['/trabajador']);
+    }
+    // Para cualquier otro rol, redirigir al home
+    else {
       this.router.navigate(['/home']);
     }
   }
@@ -117,15 +119,7 @@ export class LoginPage {
     this.router.navigate(['/home']);
   }
 
-  fillTestCredentials() {
-    this.email = 'admin@sanbernardo.cl';
-    this.password = 'password123';
-    this.errorMessage = 'Credenciales de prueba cargadas. Haz click en Ingresar.';
-  }
-
-  fillInstitutionalTestCredentials() {
-    this.email = 'prueba@sanbernardo.cl';
-    this.password = 'test1234';
-    this.errorMessage = 'Credenciales institucionales de prueba cargadas. Haz click en Ingresar.';
+  goToRegister() {
+    this.router.navigate(['/register']);
   }
 }

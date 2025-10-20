@@ -39,7 +39,7 @@
       </ion-item>
 
       <div style="margin-top: 16px; text-align: center; color: #ccc;">
-        ¿No tienes cuenta? <a routerLink="/register" style="color:#1976d2; text-decoration:underline;">Regístrate aquí</a>
+        ¿No tienes cuenta? <a (click)="goToRegister()" style="color:#1976d2; text-decoration:underline; cursor: pointer;">Regístrate aquí</a>
       </div>
 
       <div style="margin-top: 24px; text-align: center;">
@@ -70,25 +70,6 @@
           style="max-width: 40%; width: 40%; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); cursor: pointer;" 
           (click)="goToHome()" 
         />
-      </div>
-
-      <!-- Botón para cargar credenciales de prueba (solo desarrollo) -->
-      <div style="margin-top: 16px; text-align: center;">
-        <ion-button 
-          expand="block" 
-          color="secondary" 
-          size="small"
-          (click)="fillTestCredentials()">
-          Cargar Credenciales de Prueba
-        </ion-button>
-        <ion-button 
-          expand="block" 
-          color="tertiary" 
-          size="small"
-          style="margin-top:8px;"
-          (click)="fillInstitutionalTestCredentials()">
-          Cargar Credenciales Institucional (prueba@sanbernardo.cl)
-        </ion-button>
       </div>
     </form>
   </div>

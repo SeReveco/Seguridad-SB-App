@@ -8,15 +8,17 @@ ion-card.vehicle-card {
 }
 
 ion-card.vehicle-card:hover {
+	color: #ff8a00;
+	background-color: rgba(20, 161, 255, 0.12);
 	transform: translateY(-4px);
 	box-shadow: 0 6px 18px rgba(0,0,0,0.18);
 }
 
 .vehicle-icon {
 	font-size: 42px;
-	color: var(--ion-color-primary);
 	display: block;
 	margin: 0 auto 8px auto;
+	color: #ffffff;
 }
 
 .vehicle-title {
