@@ -1,7 +1,9 @@
 <ion-header>
   <ion-toolbar color="primary">
     <ion-title>
-      <img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo"
+        style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
       Solicitud
     </ion-title>
   </ion-toolbar>
@@ -9,63 +11,92 @@
 
 <ion-content class="ion-padding">
   <form (ngSubmit)="enviarSolicitud()">
-    <ion-item>
-      <ion-label position="floating">Nombre</ion-label>
-      <ion-input [(ngModel)]="nombre" name="nombre" type="text" required (ionInput)="onInputChange()"></ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-label position="floating">Apellido</ion-label>
-      <ion-input [(ngModel)]="apellido" name="apellido" type="text" required (ionInput)="onInputChange()"></ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-label position="floating">Rut</ion-label>
-      <ion-input [(ngModel)]="rut" name="rut" type="text" required (ionInput)="onInputChange()"></ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-label position="floating">Correo</ion-label>
-      <ion-input [(ngModel)]="correo" name="correo" type="email" required (ionInput)="onInputChange()"></ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-label position="floating">Teléfono</ion-label>
-      <ion-input [(ngModel)]="telefono" name="telefono" type="tel" required (ionInput)="onInputChange()"></ion-input>
-    </ion-item>
+    <!-- Información del Usuario (solo lectura) -->
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Información Personal</ion-label>
+      </ion-list-header>
 
-    <ion-item>
-      <ion-label position="floating">Dirección</ion-label>
-      <ion-input [(ngModel)]="direccion" name="direccion" type="text" required (ionInput)="onInputChange()" placeholder="Ingresa tu dirección completa"></ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-label position="floating">Descripción</ion-label>
-      <ion-textarea [(ngModel)]="descripcion" name="descripcion" required autoGrow="true" style="white-space: pre-wrap;" (ionInput)="onInputChange()" placeholder="Describe detalladamente tu solicitud..."></ion-textarea>
-    </ion-item>
-    
+      <ion-item>
+        <ion-label position="stacked">Nombre</ion-label>
+        <ion-input [(ngModel)]="nombre" name="nombre" type="text" required readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Apellido</ion-label>
+        <ion-input [(ngModel)]="apellido" name="apellido" type="text" required readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">RUT</ion-label>
+        <ion-input [(ngModel)]="rut" name="rut" type="text" required readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Teléfono</ion-label>
+        <ion-input [(ngModel)]="telefono" name="telefono" type="tel" required readonly></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <!-- Información de la Solicitud -->
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Información de la Solicitud</ion-label>
+      </ion-list-header>
+
+      <ion-item>
+        <ion-label position="stacked">Tipo de Solicitante</ion-label>
+        <ion-select [(ngModel)]="tipoSolicitante" name="tipoSolicitante" required>
+          <ion-select-option value="ciudadano">Ciudadano</ion-select-option>
+          <ion-select-option value="empresa">Empresa</ion-select-option>
+          <ion-select-option value="organizacion">Organización</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Dirección</ion-label>
+        <ion-input 
+          [(ngModel)]="direccionSolicitante" 
+          name="direccionSolicitante" 
+          type="text" 
+          required 
+          placeholder="Ingresa tu dirección completa">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Detalle de la Solicitud</ion-label>
+        <ion-textarea 
+          [(ngModel)]="detalleSolicitud" 
+          name="detalleSolicitud" 
+          required 
+          autoGrow="true" 
+          placeholder="Describe detalladamente tu solicitud...">
+        </ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <!-- Mensaje de error -->
     <div *ngIf="error" style="color: red; margin-top: 8px; text-align: center; padding: 10px; background: rgba(255,0,0,0.1); border-radius: 8px;">
-      <ion-icon name="warning-outline" style="vertical-align: middle; margin-right: 5px;"></ion-icon>
       {{ error }}
     </div>
-    
-    <div style="margin-top: 24px; text-align: center;">
-      <ion-button 
-        expand="block" 
-        type="submit" 
-        color="primary"
-        [disabled]="loading">
-        <ion-spinner *ngIf="loading" name="crescent" style="margin-right: 8px;"></ion-spinner>
-        {{ loading ? 'Enviando...' : 'Enviar Solicitud' }}
-      </ion-button>
-    </div>
+
+    <!-- Botón de envío -->
+    <ion-button 
+      expand="block" 
+      type="submit" 
+      color="primary" 
+      style="margin-top: 16px;"
+      [disabled]="loading">
+      <ion-spinner *ngIf="loading" name="crescent" style="margin-right: 8px;"></ion-spinner>
+      {{ loading ? 'Enviando...' : 'Enviar Solicitud' }}
+    </ion-button>
   </form>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar color="primary">
     <div style="display: flex; flex-direction: row; align-items: flex-end; justify-content: center; width: 100%; gap: 1cm;">
-      
       <div style="display: flex; flex-direction: column; align-items: center;">
         <ion-button fill="clear" routerLink="/home" style="display: flex; flex-direction: column; align-items: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
@@ -74,7 +105,6 @@
           </div>
         </ion-button>
       </div>
-
       <div style="display: flex; flex-direction: column; align-items: center;">
         <ion-button fill="clear" routerLink="/alerta" style="display: flex; flex-direction: column; align-items: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
@@ -83,7 +113,6 @@
           </div>
         </ion-button>
       </div>
-
       <div style="display: flex; flex-direction: column; align-items: center;">
         <ion-button fill="clear" routerLink="/solicitud" style="display: flex; flex-direction: column; align-items: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
@@ -92,7 +121,6 @@
           </div>
         </ion-button>
       </div>
-
       <div style="display: flex; flex-direction: column; align-items: center;">
         <ion-button fill="clear" (click)="openMenu()" style="display: flex; flex-direction: column; align-items: center;">
           <div style="display: flex; flex-direction: column; align-items: center;">
@@ -101,7 +129,6 @@
           </div>
         </ion-button>
       </div>
-
     </div>
   </ion-toolbar>
 </ion-footer>

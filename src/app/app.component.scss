@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: hsl(152, 33%, 92%);
+} 
+
+:root {
+  --ion-background-color: #e5f2ec;
+}
+
+ion-content {
+  --background: #e5f2ec;
+}

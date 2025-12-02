@@ -36,4 +36,18 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: hsl(152, 33%, 92%);
+} 
+
+:root {
+  --ion-background-color: #e5f2ec;
+}
+
+ion-content {
+  --background: #e5f2ec;
+}

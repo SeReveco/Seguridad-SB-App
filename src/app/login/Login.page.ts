@@ -1,125 +1,113 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
-import { LoginResponse } from '../models/usuario.model';
+import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
-  standalone: false
+  standalone: false,
 })
 
 export class LoginPage {
-  email: string = '';
-  password: string = '';
-  errorMessage: string = '';
-  nombreUsuario: string = '';
-  loggedIn = false;
+  credentials = {
+    email: '',
+    password: ''
+  };
+  
   loading = false;
+  errorMessage = '';
 
   constructor(
+    private apiService: ApiService,
     private router: Router,
-    private apiService: ApiService
+    private loadingCtrl: LoadingController,
+    private toastCtrl: ToastController
   ) {}
 
-  async onLogin() {
-    if (!this.email || !this.password) {
-      this.errorMessage = 'Por favor ingresa tu correo y contraseña.';
-      return;
-    }
+  async login() {
+  console.log('🔐 Intentando login con:', this.credentials.email);
+  
+  this.loading = true;
+  const loading = await this.loadingCtrl.create({
+    message: 'Iniciando sesión...'
+  });
+  await loading.present();
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(this.email)) {
-      this.errorMessage = 'Por favor ingresa un correo electrónico válido.';
-      return;
-    }
-
-    this.loading = true;
-    this.errorMessage = '';
-
-    try {
-      console.log('Intentando login con:', this.email);
+  this.apiService.login(this.credentials.email, this.credentials.password).subscribe({
+    next: async (response) => {
+      console.log('✅ Respuesta COMPLETA del servidor:', response);
+      await loading.dismiss();
+      this.loading = false;
       
-      const response = await this.apiService.login(this.email, this.password).toPromise();
-      
-      console.log('Respuesta del servidor:', response);
-
-      if (response && response.success && response.user) {
-        this.nombreUsuario = response.user.nombre_usuario;
-        this.loggedIn = true;
+      if (response.success) {
+        console.log('✅ Login exitoso en el frontend');
+        console.log('✅ Datos del usuario:', response.user);
         
-        console.log('Login exitoso. Usuario:', response.user);
-        
-        setTimeout(() => {
-          // Guardar el nombre y email en localStorage para usar en otras vistas
-          try {
-            localStorage.setItem('nombreUsuario', this.nombreUsuario || '');
-            localStorage.setItem('email', this.email || '');
-            localStorage.setItem('userRole', response.user?.nombre_rol || '');
-          } catch (e) {
-            console.warn('No se pudo guardar en localStorage:', e);
+        if (this.apiService.canAccessApp()) {
+          const user = this.apiService.getCurrentUser();
+          console.log('✅ Usuario en auth service:', user);
+          
+          if (user?.user_type === 'ciudadano') {
+            this.router.navigate(['/home']);
+          } else if (user?.user_type === 'trabajador') {
+            this.router.navigate(['/trabajador']);
           }
-
-          this.redirectByRole(response.user);
-        }, 1500);
-        
-      } else if (response) {
-        this.errorMessage = response.error || 'Error en el servidor. Intenta nuevamente.';
+          
+          const toast = await this.toastCtrl.create({
+            message: `Bienvenido ${user?.nombre}`,
+            duration: 2000,
+            color: 'success'
+          });
+          toast.present();
+          
+        } else {
+          console.log('❌ Usuario sin acceso a la app');
+          this.errorMessage = 'Tu rol no tiene acceso a la aplicación móvil.';
+          this.apiService.logout();
+        }
       } else {
-        this.errorMessage = 'No se recibió respuesta del servidor. Intenta nuevamente.';
+        console.log('❌ Login falló en el servidor');
+        this.errorMessage = response.error || 'Error en las credenciales';
       }
+    },
+    error: async (error) => {
+      console.error('❌ Error completo en login:', error);
+      console.error('❌ Error status:', error.status);
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error details:', error.error);
       
-    } catch (error: any) {
-      console.error('Error completo en login:', error);
+      await loading.dismiss();
+      this.loading = false;
       
       if (error.status === 0) {
-        this.errorMessage = 'No se puede conectar al servidor. Verifica tu conexión.';
+        this.errorMessage = 'Error de conexión. Verifica tu internet.';
       } else if (error.status === 401) {
-        this.errorMessage = 'Credenciales incorrectas. Verifica tu email y contraseña.';
-      } else if (error.error?.error) {
-        this.errorMessage = error.error.error;
+        this.errorMessage = 'Credenciales inválidas';
       } else {
-        this.errorMessage = 'Error inesperado. Intenta nuevamente.';
+        this.errorMessage = error.error?.error || 'Error al iniciar sesión';
       }
-    } finally {
-      this.loading = false;
+      
+      const toast = await this.toastCtrl.create({
+        message: this.errorMessage,
+        duration: 4000,
+        color: 'danger'
+      });
+      toast.present();
     }
-  }
-
-  private redirectByRole(user: any) {
-    console.log('Redirigiendo usuario con rol:', user.nombre_rol);
-    console.log('ID del rol:', user.id_rol);
-    
-    // Ciudadano (id=3) → va al home
-    if (user.id_rol === 3) {
-      this.router.navigate(['/home']);
-    } 
-    // Administrador (id=1), Conductor (id=4), Inspector (id=5) → van a trabajador
-    else if (user.id_rol === 1 || user.id_rol === 4 || user.id_rol === 5) {
-      this.router.navigate(['/trabajador']);
-    }
-    // Operador (id=2) también va a trabajador por si acaso
-    else if (user.id_rol === 2) {
-      this.router.navigate(['/trabajador']);
-    }
-    // Para cualquier otro rol, redirigir al home
-    else {
-      this.router.navigate(['/home']);
-    }
-  }
+  });
+}
 
   onInputChange() {
-    if (this.errorMessage) {
-      this.errorMessage = '';
-    }
-  }
-
-  goToHome() {
-    this.router.navigate(['/home']);
+    this.errorMessage = '';
   }
 
   goToRegister() {
     this.router.navigate(['/register']);
+  }
+
+  goToHome() {
+    this.router.navigate(['/home']);
   }
 }

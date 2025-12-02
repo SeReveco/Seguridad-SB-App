@@ -1,213 +1,343 @@
-ion-card.vehicle-card {
-	--background: rgba(255,255,255,0.06);
-	border-radius: 12px;
-	text-align: center;
-	padding: 12px 8px;
-	cursor: pointer;
-	transition: transform 0.12s ease, box-shadow 0.12s ease;
+/* trabajador.page.scss - Versión Mejorada */
+
+/* Variables de colores para mejor contraste */
+:root {
+  --text-primary: #1a1a1a;
+  --text-secondary: #424242;
+  --text-tertiary: #616161;
+  --background-light: #ffffff;
+  --background-card: #f8f9fa;
+  --border-light: #e0e0e0;
+  --border-focus: #1976d2;
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
-ion-card.vehicle-card:hover {
-	color: #ff8a00;
-	background-color: rgba(20, 161, 255, 0.12);
-	transform: translateY(-4px);
-	box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+/* Contenedor principal */
+ion-content {
+  --background: #f5f5f5;
 }
 
-.vehicle-icon {
-	font-size: 42px;
-	display: block;
-	margin: 0 auto 8px auto;
-	color: #ffffff;
+.welcome-container {
+  text-align: center;
+  margin-top: 24px;
 }
 
-.vehicle-title {
-	font-weight: 700;
-	color: #fff;
+.welcome-title {
+  color: #1a1a1a;
+  font-weight: 600;
+  margin-bottom: 24px;
+  font-size: 1.5rem;
+}
+
+.content-section {
+  margin-top: 12px;
+}
+
+/* Estilos para la información seleccionada */
+.selected-info {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 16px 0;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.info-label {
+  font-size: 1rem;
+  margin: 0 0 8px 0;
+  color: #424242;
+  font-weight: 500;
+}
+
+.info-value {
+  font-size: 1.15rem;
+  margin: 0;
+  font-weight: 700;
+}
+
+.role-value {
+  color: #1976d2; /* Azul con buen contraste */
+}
+
+.vehicle-value {
+  color: #1a1a1a; /* Rojo con buen contraste */
+}
+
+/* Estilos para las tarjetas de vehículos */
+.vehicle-selection {
+  margin-top: 16px;
 }
 
 .vehicle-row {
-	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 4px; /* menos separación entre tarjetas */
-	justify-items: center;
-}
-
-.role-buttons-wrapper {
-	display: flex;
-	justify-content: center;
-	margin-bottom: 6px;
-}
-
-.role-buttons ion-button {
-	margin: 0 6px;
-	min-width: 120px;
-	--border-radius: 12px;
-	--background: #ffffff;
-	height: 110px; /* ligeramente más compacto */
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 6px 10px;
-	text-align: center;
-	font-weight: 700;
-	color: #000000;
-	border: 1px solid rgba(0,0,0,0.06);
-	box-shadow: none;
-	transform: none;
-	transition: border 0.12s ease, background 0.12s ease;
-}
-
-/* Forzar que los botones estén en una sola línea y centrados */
-.role-buttons {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	gap: 8px;
-}
-
-.selected-info {
-	display: block;
-	margin-bottom: 6px;
-}
-
-.role-buttons .role-btn {
-	margin: 0 6px;
-	min-width: 120px;
-	--border-radius: 12px;
-	--background: #ffffff; /* fondo blanco */
-	height: 110px; /* compacto */
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 6px 10px;
-	text-align: center;
-	font-weight: 700;
-	color: #000000; /* texto negro */
-	border: 1px solid rgba(0,0,0,0.06);
-	box-shadow: none;
-	transform: none;
-	transition: border 0.12s ease, background 0.12s ease;
-}
-
-.role-buttons .role-btn.active {
-	/* flat active: borde azul pero sin elevación ni movimiento */
-	box-shadow: none;
-	transform: none;
-	border: 2px solid var(--ion-color-primary) !important;
-	background: #ffffff;
-}
-
-/* Regla extra de alta especificidad por si Ionic aplica estilos internos */
-ion-button.role-btn.active {
-	border: 2px solid var(--ion-color-primary) !important;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  justify-items: center;
+  margin: 12px 0;
 }
 
 ion-col[size="6"] {
-	box-sizing: border-box;
-	padding: 4px; /* menos padding para que estén más juntas */
-	width: 100%;
+  box-sizing: border-box;
+  padding: 6px;
+  width: 100%;
 }
 
 ion-card.vehicle-card {
-	max-width: 260px; /* reducir anchura máxima para que las tarjetas queden más juntas */
-	width: 100%;
-	height: 132px; /* altura ligeramente menor */
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	overflow: hidden; /* evita que contenido sobresalga */
+  --background: #e0e0e0;
+  border-radius: 12px;
+  text-align: center;
+  padding: 16px 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 0;
+  width: 100%;
+  max-width: 160px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
 }
 
-/* Estilo para tarjeta seleccionada */
+/* Efecto hover para las tarjetas */
+ion-card.vehicle-card:hover {
+  background-color: rgba(25, 118, 210, 0.05);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  border-color: rgba(25, 118, 210, 0.3);
+}
+
+/* Tarjeta seleccionada */
 ion-card.vehicle-card.selected {
-	border: 2px solid var(--ion-color-primary);
-	box-shadow: 0 8px 20px rgba(0,123,255,0.18); /* sombra azul para tarjetas seleccionadas */
-	transform: translateY(-2px) scale(1.03);
+  border: 2px solid #1976d2;
+  background-color: rgba(25, 118, 210, 0.1);
+  box-shadow: 0 4px 16px rgba(25, 118, 210, 0.25);
+  transform: translateY(-2px);
 }
 
-ion-card.vehicle-card {
-	transition: transform 0.12s ease, box-shadow 0.12s ease, border 0.12s ease;
+/* Contenido de la tarjeta */
+.vehicle-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  background-color: #009FE3;
+  border-radius: 12px 12px 12px 12px;
 }
 
-/* Ajustes para móviles: mantener 2x2 pero con tarjetas más compactas */
+.vehicle-card-content:hover {
+  background-color: #0077C8;
+}
+
+/* Iconos de vehículos */
+.vehicle-icon {
+  font-size: 36px;
+  color: #fff;
+  display: block;
+  margin: 0 auto;
+}
+
+
+/* Título del vehículo */
+.vehicle-title {
+  font-weight: 600;
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+}
+
+/* Secciones de formulario */
+.form-section {
+  margin-top: 16px;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.form-item {
+  --background: #ffffff;
+  --border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  margin: 12px 0;
+  border: 1px solid #e0e0e0;
+}
+
+.form-label {
+  color: #424242;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.form-select, .form-input {
+  color: #1a1a1a;
+  font-weight: 500;
+}
+
+/* Sección de entrada manual */
+.manual-input-section {
+  margin-top: 12px;
+}
+
+/* Mostrar selección */
+.selected-display {
+  margin-top: 8px;
+  padding: 0 8px;
+}
+
+.selected-text {
+  font-size: 0.9rem;
+  color: #424242;
+  margin: 0;
+}
+
+.selected-text strong {
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+/* Botón de acción */
+.action-section {
+  margin-top: 24px;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.start-button {
+  --border-radius: 12px;
+  --box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+  margin: 16px 0;
+  font-weight: 600;
+  height: 48px;
+}
+
+/* Estados de carga y error */
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.error-state ion-icon {
+  font-size: 48px;
+  color: #d32f2f;
+  margin-bottom: 16px;
+}
+
+/* Responsive para móviles */
 @media (max-width: 420px) {
-	.vehicle-row {
-		gap: 4px;
-	}
+  .welcome-title {
+    font-size: 1.3rem;
+    margin-bottom: 20px;
+  }
+  
+  .vehicle-row {
+    gap: 8px;
+  }
 
-	ion-card.vehicle-card {
-		padding: 8px 4px;
-		max-width: 150px;
-		height: 110px; /* altura fija menor en móvil */
-	}
+  ion-card.vehicle-card {
+    max-width: 140px;
+    height: 110px;
+    padding: 12px 6px;
+  }
 
-	.vehicle-icon {
-		font-size: 32px;
-	}
+  .vehicle-icon {
+    font-size: 32px;
+  }
 
-	.vehicle-image {
-		width: 32px;
-		height: 32px;
-	}
+  .vehicle-title {
+    font-size: 11px;
+  }
 
-	.vehicle-title {
-		font-size: 0.95rem;
-	}
+  .selected-info {
+    margin: 12px 0;
+    padding: 14px;
+  }
+
+  .info-label {
+    font-size: 0.95rem;
+  }
+
+  .info-value {
+    font-size: 1.1rem;
+  }
 }
 
-.vehicle-moto {
-	--background: linear-gradient(135deg, rgba(255,100,0,0.12), rgba(255,160,0,0.08));
+/* Para tablets y pantallas más grandes */
+@media (min-width: 768px) {
+  .vehicle-row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  ion-card.vehicle-card {
+    max-width: 180px;
+    height: 140px;
+  }
+
+  .vehicle-icon {
+    font-size: 42px;
+  }
+
+  .vehicle-title {
+    font-size: 14px;
+  }
 }
 
-.vehicle-moto .vehicle-icon {
-	font-size: 52px;
-	color: #ff8a00;
-	position: relative;
+/* Efectos de transición suaves */
+ion-card.vehicle-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
 }
 
-.vehicle-moto .vehicle-icon::before {
-	content: '';
-	display: block;
-	width: 72px;
-	height: 72px;
-	background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.06), rgba(0,0,0,0));
-	border-radius: 50%;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
-	top: -6px;
-	z-index: -1;
+/* Mejora de accesibilidad - focus states */
+ion-card.vehicle-card:focus {
+  outline: 2px solid #1976d2;
+  outline-offset: 2px;
 }
 
-	.vehicle-card-content {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 4px;
-	}
-
-.vehicle-input-wrapper {
-	max-width: 420px;
-	margin-left: auto;
-	margin-right: auto;
+/* Estados de formulario mejorados */
+.form-item:focus-within {
+  border-color: #1976d2;
+  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
 }
 
-	.vehicle-image {
-		width: 42px;
-		height: 42px;
-		object-fit: contain;
-	}
-
-.radio-list ion-item {
-	--ion-item-background: rgba(255,255,255,0.02);
-	border-radius: 8px;
-	margin-bottom: 8px;
+/* Estados de carga */
+.loading-state ion-spinner {
+  margin-bottom: 16px;
 }
 
-.radio-list ion-label strong {
-	font-weight: 700;
-	margin-right: 8px;
+.loading-state p {
+  color: #424242;
+  margin: 0;
 }
 
+/* Mensajes de error */
+.error-state p {
+  color: #424242;
+  margin-bottom: 16px;
+}

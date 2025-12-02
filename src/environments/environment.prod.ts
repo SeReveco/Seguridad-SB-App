@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: false,
+  apiUrl: 'https://seguridad-sb.onrender.com'
 };

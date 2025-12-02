@@ -1,35 +1,187 @@
-ion-content {
-  --background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-}
-
-ion-item {
-  --background: rgba(255, 255, 255, 0.1);
-  --border-radius: 8px;
-  margin-bottom: 16px;
-  
-  ion-label {
-    color: #fff !important;
-  }
-  
-  ion-input {
-    color: #fff;
-  }
-}
-
-ion-button {
-  --border-radius: 8px;
-  --padding-top: 20px;
-  --padding-bottom: 20px;
-  font-weight: 600;
-  
-  &:disabled {
-    opacity: 0.7;
-  }
-}
-
-// Estilos para el modo oscuro
-@media (prefers-color-scheme: dark) {
+/* Fondo general del contenido */
+:host {
   ion-content {
-    --background: linear-gradient(135deg, #0f1b2e 0%, #1a2d4d 100%);
+    --background: #e5f2ec;
+  }
+}
+
+/* ───────── Barra superior (azul claro) ───────── */
+
+.login-toolbar {
+  --background: #00aef0; // azul claro tipo banner de la imagen
+  --color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login-toolbar .logo {
+  height: 42px;
+  width: 42px;
+  margin-right: 8px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.toolbar-title {
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+/* ───────── Layout principal ───────── */
+
+.login-container {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 32px;
+}
+
+/* ───────── Tarjeta de login (blanca centrada) ───────── */
+
+.contenido-formulario {
+  width: 100%;
+  max-width: 420px;
+  background: #fff;
+  padding: 24px 24px 28px;
+  margin-top: 32px;
+
+  border-radius: 18px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+}
+
+.logo-section {
+  text-align: center;
+}
+
+.login-title {
+  color: #252525;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0 0 4px;
+}
+
+.texto-formulario {
+  color: #252525;
+  font-size: 0.9rem;
+  text-align: center;
+  margin: 0 0 20px;
+}
+
+/* ───────── Inputs tipo tarjeta (como la maqueta web) ───────── */
+
+ion-list {
+  background: #fff;
+}
+
+.login-list {
+  padding: 0;
+  margin: 0 0 4px;
+}
+
+.input-group {
+  margin-bottom: 14px;
+}
+
+.input-group ion-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #404040;
+  margin-bottom: 4px;
+}
+
+/* Campo de texto claro con borde suave */
+.input-group ion-input {
+  --background: #f7f8fb;
+  --color: #333333;
+  --placeholder-color: #a0a6b5;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  --border-radius: 10px;
+
+  border-radius: 10px;
+  border: 2px solid #e9ecef;
+  height: 46px;
+  font-size: 0.95rem;
+}
+
+/* Ajuste del input nativo para que no meta estilos raros */
+.input-group ::ng-deep .native-input {
+  caret-color: #333333;
+}
+
+/* ───────── Enlace de registro ───────── */
+
+.register-link {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
+.register-link p {
+  margin: 0;
+  color: #555555;
+}
+
+.register-link a {
+  color: #0057d9; /* azul del botón / link de la maqueta */
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* ───────── Botón azul "Iniciar Sesión" ───────── */
+
+.login-button {
+  margin-top: 20px;
+  font-weight: 700;
+  text-transform: none;
+
+  --border-radius: 10px;
+  --background: #0057d9;      
+  --background-hover: #0049b8;
+  --background-activated: #0049b8;
+  --color: #ffffff;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+
+.login-button::part(native) {
+  font-size: 1rem;
+}
+
+.login-spinner {
+  margin-right: 8px;
+}
+
+/* ───────── Mensaje de error ───────── */
+
+.error-message {
+  max-width: 420px;
+  margin-top: 16px;
+  padding: 10px 12px;
+  text-align: center;
+
+  color: #c62828;
+  background: rgba(198, 40, 40, 0.08);
+  border-radius: 8px;
+}
+
+/* ───────── Responsive ───────── */
+
+@media (max-width: 480px) {
+  .contenido-formulario {
+    margin-top: 24px;
+    padding-inline: 18px;
+  }
+
+  .login-title {
+    font-size: 1.6rem;
   }
 }

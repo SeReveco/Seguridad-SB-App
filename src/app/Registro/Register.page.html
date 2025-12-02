@@ -1,75 +1,137 @@
 <ion-header>
-  <ion-toolbar color="primary">
+  <ion-toolbar class="register-toolbar">
     <ion-title>
-      <img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo" style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
+      <img
+        src="assets/Img/Logo_San_Bernardo.png"
+        alt="Logo San Bernardo"
+        class="toolbar-logo"
+      />
       Registrarse
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-  <form (ngSubmit)="register()">
-    <!-- Campo RUT -->
-    <ion-item>
-      <ion-label position="floating">RUT</ion-label>
-      <ion-input [(ngModel)]="rut_usuario" name="rut_usuario" 
-                placeholder="12345678-9" required></ion-input>
-    </ion-item>
+<ion-content fullscreen>
+  <div class="register-page">
+    <div class="register-card">
+      <h1 class="register-title">Registrarse</h1>
 
-    <!-- Campo Nombre -->
-    <ion-item>
-      <ion-label position="floating">Nombre</ion-label>
-      <ion-input [(ngModel)]="nombre_usuario" name="nombre_usuario" required></ion-input>
-    </ion-item>
+      <form (ngSubmit)="register()">
+        <!-- Campo RUT -->
+        <ion-item lines="none" class="register-item">
+          <ion-label position="floating">RUT</ion-label>
+          <ion-input
+            [(ngModel)]="rut_ciudadano"
+            name="rut_ciudadano"
+            placeholder="12345678-9"
+            required>
+          </ion-input>
+        </ion-item>
 
-    <!-- Campo Apellido Paterno -->
-    <ion-item>
-      <ion-label position="floating">Apellido Paterno</ion-label>
-      <ion-input [(ngModel)]="apellido_pat_usuario" name="apellido_pat_usuario" required></ion-input>
-    </ion-item>
+        <!-- Campo Nombre -->
+        <ion-item lines="none" class="register-item">
+          <ion-label position="floating">Nombre</ion-label>
+          <ion-input
+            [(ngModel)]="nombre_ciudadano"
+            name="nombre_ciudadano"
+            required>
+          </ion-input>
+        </ion-item>
 
-    <!-- Campo Apellido Materno -->
-    <ion-item>
-      <ion-label position="floating">Apellido Materno</ion-label>
-      <ion-input [(ngModel)]="apellido_mat_usuario" name="apellido_mat_usuario" required></ion-input>
-    </ion-item>
+        <!-- Campo Apellido Paterno -->
+        <ion-item lines="none" class="register-item">
+          <ion-label position="floating">Apellido Paterno</ion-label>
+          <ion-input
+            [(ngModel)]="apellido_pat_ciudadano"
+            name="apellido_pat_ciudadano"
+            required>
+          </ion-input>
+        </ion-item>
 
-    <!-- Campo Correo -->
-    <ion-item>
-      <ion-label position="floating">Correo Electrónico</ion-label>
-      <ion-input [(ngModel)]="correo_electronico_usuario" name="correo_electronico_usuario" 
-                type="email" required></ion-input>
-    </ion-item>
+        <!-- Campo Apellido Materno -->
+        <ion-item lines="none" class="register-item">
+          <ion-label position="floating">Apellido Materno</ion-label>
+          <ion-input
+            [(ngModel)]="apellido_mat_ciudadano"
+            name="apellido_mat_ciudadano"
+            required>
+          </ion-input>
+        </ion-item>
 
-    <!-- Campo Teléfono -->
-    <ion-item>
-      <ion-label position="floating">Teléfono Móvil</ion-label>
-      <ion-input [(ngModel)]="telefono_movil_usuario" name="telefono_movil_usuario" 
-                type="tel" placeholder="+56912345678" required></ion-input>
-    </ion-item>
+        <!-- Campo Correo -->
+        <ion-item lines="none" class="register-item">
+          <ion-label position="floating">Correo Electrónico</ion-label>
+          <ion-input
+            [(ngModel)]="correo_electronico_ciudadano"
+            name="correo_electronico_ciudadano"
+            type="email"
+            required>
+          </ion-input>
+        </ion-item>
 
-    <!-- Campo Contraseña -->
-    <ion-item>
-      <ion-label position="floating">Contraseña</ion-label>
-      <ion-input [(ngModel)]="password" name="password" type="password" required></ion-input>
-    </ion-item>
+        <!-- Campo Teléfono -->
+        <ion-item lines="none" class="register-item">
+          <ion-label position="floating">Teléfono Móvil</ion-label>
+          <ion-input
+            [(ngModel)]="telefono_movil_ciudadano"
+            name="telefono_movil_ciudadano"
+            type="tel"
+            placeholder="+56912345678"
+            required>
+          </ion-input>
+        </ion-item>
 
-    <!-- Campo Confirmar Contraseña -->
-    <ion-item>
-      <ion-label position="floating">Repetir Contraseña</ion-label>
-      <ion-input [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required></ion-input>
-    </ion-item>
+        <!-- Campo Contraseña -->
+        <ion-item lines="none" class="register-item">
+          <ion-label position="floating">Contraseña</ion-label>
+          <ion-input
+            [(ngModel)]="password_ciudadano"
+            name="password_ciudadano"
+            type="password"
+            required>
+          </ion-input>
+        </ion-item>
 
-    <!-- Mensaje de error -->
-    <div *ngIf="error" style="color: red; margin-top: 8px;">{{ error }}</div>
+        <!-- Campo Confirmar Contraseña -->
+        <ion-item lines="none" class="register-item">
+          <ion-label position="floating">Repetir Contraseña</ion-label>
+          <ion-input
+            [(ngModel)]="confirmPassword"
+            name="confirmPassword"
+            type="password"
+            required>
+          </ion-input>
+        </ion-item>
 
-    <!-- Botones -->
-    <ion-button expand="block" type="submit" color="primary" style="margin-top: 16px;">
-      Registrarse
-    </ion-button>
+        <!-- Mensaje de error -->
+        <div *ngIf="error" class="error-message">
+          {{ error }}
+        </div>
 
-    <ion-button expand="block" fill="clear" routerLink="/login">
-      ¿Ya tienes cuenta? Inicia sesión
-    </ion-button>
-  </form>
+        <!-- Botón principal -->
+        <ion-button
+          expand="block"
+          type="submit"
+          class="register-button"
+          [disabled]="loading">
+          <ion-spinner
+            *ngIf="loading"
+            name="crescent"
+            class="register-spinner">
+          </ion-spinner>
+          {{ loading ? 'Registrando...' : 'Registrarse' }}
+        </ion-button>
+
+        <!-- Botón texto: ir a login -->
+        <button type="button" class="register-link" (click)="goToLogin()">
+          ¿Ya tienes cuenta? Ingresa aquí
+        </button>
+      </form>
+    </div>
+
+    <!-- Logo abajo (opcional) -->
+    <div class="register-footer-logo">
+      <img src="assets/Img/San_Bernardo_Logo.png" alt="Logo San Bernardo" />
+    </div>
+  </div>
 </ion-content>

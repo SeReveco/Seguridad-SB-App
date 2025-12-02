@@ -1,232 +1,508 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonInput } from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ToastController, LoadingController } from '@ionic/angular';
+import { ApiService } from '../services/api.service';
 
 @Component({
-  selector: 'app-Trabajador',
+  selector: 'app-trabajador',
   templateUrl: 'trabajador.page.html',
   styleUrls: ['trabajador.page.scss'],
   standalone: false,
 })
 export class TrabajadorPage implements OnInit {
-  nombreUsuario: string | null = null;
-  workOption: string | null = null;
-  todayRole: string | null = null;
-  vehicles: Array<{ key: string; label: string; icon?: string; img?: string; faIcon?: string }> = [
-    { key: 'Auto', label: 'Auto', faIcon: 'fas fa-car' },
-    { key: 'Moto', label: 'Motocicleta', faIcon: 'fas fa-motorcycle' },
-    { key: 'Camioneta', label: 'Camioneta', img: 'assets/Img/Camioneta-Silueta.png' },
-    { key: 'Bicicleta', label: 'Bicicleta', faIcon: 'fas fa-bicycle' },
-  ];
-  // Lista de radios disponibles
-  radios: Array<{ label: string; code: string }> = [
-    { label: '61', code: 'SC7' },
-    { label: '63', code: 'SC4' },
-    { label: '64', code: '621' },
-    { label: '66', code: '560' },
-    { label: '67', code: 'SC6' },
-    { label: '72', code: 'SC3' },
-    { label: '73', code: 'SC13' },
-    { label: '74', code: 'SC1' },
-    { label: '89', code: 'SC10' },
-    { label: '90', code: 'SC19' },
-    { label: '91', code: 'SC20' },
-    { label: '92', code: 'SC14' },
-    { label: '98', code: 'SC5' },
-    { label: '99', code: 'SC17' },
-    { label: '100', code: '623/' },
-    { label: '102', code: '626' },
-    { label: '103', code: '624/' },
-    { label: '104', code: '629/SC30' },
-    { label: '105', code: '627' },
-    { label: '106', code: 'SC16' },
-    { label: '107', code: '625/SC26' },
-    { label: '111', code: 'SC15' },
-    { label: '112', code: '620/SC21' },
-    { label: '113', code: '348' },
-    { label: 'ECO1', code: '628' },
-    { label: 'ECO2', code: 'SC18' },
-    { label: 'ECO3', code: 'SC15' },
-    { label: 'ECO4', code: 'SC12' },
-  ];
-  radioSelected: { label: string; code: string } | null = null;
-  radioFrequency: string | null = null;
-  vehicleNumber: string | null = null;
-  @ViewChild('vehicleNumberInput', { static: false }) vehicleInput: IonInput | undefined;
+  nombreUsuario: string = '';
+  rolAsignado: string = '';
 
-  constructor(private router: Router, private toastCtrl: ToastController) {}
+  // Datos para los selects
+  tiposVehiculos: any[] = [];
+  tipoVehiculoSeleccionado: any = null;
+  vehiculosFiltrados: any[] = [];
+  vehiculoSeleccionado: any = null;
+  radiosDisponibles: any[] = [];
+  radioSeleccionada: any = null;
+
+  // Código manual
+  codigoVehiculoManual: string = '';
+
+  // Estados de carga
+  isLoading: boolean = false;
+  hasError: boolean = false;
+
+  // Estado del turno
+  tieneTurnoActivo: boolean = false;
+  detalleTurnoActivo: any = null;
+
+  constructor(
+    private router: Router,
+    private toastCtrl: ToastController,
+    private loadingCtrl: LoadingController,
+    private apiService: ApiService
+  ) {}
 
   ngOnInit() {
-    this.cargarTrabajador();
-    const freq = localStorage.getItem('radioFrequency');
-    if (freq) this.radioFrequency = freq;
-    const role = localStorage.getItem('todayRole');
-    if (role) this.todayRole = role;
-    const vnum = localStorage.getItem('vehicleNumber');
-    if (vnum) this.vehicleNumber = vnum;
+    this.cargarDatosTrabajador();
   }
 
-  cargarTrabajador() {
-    this.nombreUsuario = localStorage.getItem('nombreUsuario');
-    this.workOption = localStorage.getItem('workOption');
-    const radioJson = localStorage.getItem('radioSelected');
-    if (radioJson) {
-      try {
-        this.radioSelected = JSON.parse(radioJson);
-      } catch {
-        this.radioSelected = null;
+  async cargarDatosTrabajador() {
+    this.isLoading = true;
+    this.hasError = false;
+
+    try {
+      const currentUser = this.apiService.getCurrentUser();
+      console.log('✅ Usuario actual:', currentUser);
+
+      if (currentUser && currentUser.id) {
+        this.nombreUsuario = currentUser.nombre || 'Trabajador';
+        this.rolAsignado = currentUser.nombre_rol || 'Sin rol asignado';
+
+        // Verificar si es trabajador (solo trabajadores pueden iniciar turnos)
+        if (!this.apiService.isTrabajador()) {
+          this.presentToast('Solo trabajadores pueden iniciar turnos');
+          this.router.navigate(['/home']);
+          return;
+        }
+
+        // Primero verificar si ya tiene turno activo
+        await this.verificarTurnoActivo(currentUser.id);
+        
+        // Si no tiene turno activo, cargar datos para iniciar uno nuevo
+        if (!this.tieneTurnoActivo) {
+          await this.cargarDatosDesdeAPI(currentUser.id);
+        }
+      } else {
+        this.presentToast('Usuario no autenticado');
+        this.router.navigate(['/login']);
       }
+    } catch (error) {
+      console.error('Error al cargar datos:', error);
+      this.hasError = true;
+      this.cargarDatosPorDefecto();
+    } finally {
+      this.isLoading = false;
     }
   }
 
-  selectWorkOption(option: string) {
-    this.workOption = option;
-    localStorage.setItem('workOption', option);
-    // Mantener en la página para que el usuario pueda cambiar o continuar
-    // esperar que el *ngIf renderice el input y luego darle foco
-    setTimeout(() => {
-      try {
-        this.vehicleInput?.setFocus();
-      } catch (e) {
-        // ignore
+  async verificarTurnoActivo(usuarioId: number) {
+    try {
+      console.log('🔍 Verificando turno activo para usuario ID:', usuarioId);
+
+      const response: any = await (this.apiService as any).http.get(
+        `${this.apiService['apiUrl']}/api/trabajador/verificar-turno-activo/${usuarioId}/`
+      ).toPromise();
+      
+      this.tieneTurnoActivo = response.tiene_turno_activo;
+      this.detalleTurnoActivo = response.detalles;
+      
+      console.log('📊 Estado del turno:', {
+        tieneTurnoActivo: this.tieneTurnoActivo,
+        detalle: this.detalleTurnoActivo
+      });
+
+      if (this.tieneTurnoActivo) {
+        this.presentToast('Ya tienes un turno activo hoy. No puedes iniciar otro turno.');
       }
-    }, 200);
+    } catch (error) {
+      console.warn('⚠️ Error verificando turno activo:', error);
+      this.tieneTurnoActivo = false;
+    }
   }
 
-  // Manejo del rol seleccionado
-  onRoleChange(ev: any) {
-    // ev.detail ? ev.detail.value : ev
-    const value = ev && ev.detail && ev.detail.value ? ev.detail.value : ev;
-    this.todayRole = value;
-    if (this.todayRole) localStorage.setItem('todayRole', this.todayRole);
+  async cargarDatosDesdeAPI(usuarioId: number) {
+    try {
+      console.log('🔍 Cargando datos para usuario ID:', usuarioId);
+
+      const url = `${this.apiService['apiUrl']}/api/trabajador/datos/${usuarioId}/`;
+      console.log('🌐 URL de la API:', url);
+
+      const data: any = await (this.apiService as any).http.get(url).toPromise();
+      this.procesarDatosAPI(data);
+    } catch (apiError: any) {
+      console.warn('⚠️ No se pudo conectar a la API con ID:', apiError);
+      await this.cargarDatosBasicosAPI();
+    }
   }
 
-  // Establecer rol mediante botones
-  setRole(role: string) {
-    this.todayRole = role;
-    if (role) localStorage.setItem('todayRole', role);
+  async cargarDatosBasicosAPI() {
+    try {
+      console.log('🔍 Cargando datos básicos desde API...');
+
+      const url = `${this.apiService['apiUrl']}/api/trabajador/datos/`;
+      console.log('🌐 URL de la API:', url);
+
+      const data: any = await (this.apiService as any).http.get(url).toPromise();
+      this.procesarDatosAPI(data);
+    } catch (error: any) {
+      console.warn('⚠️ No se pudieron cargar datos básicos:', error);
+      this.cargarDatosPorDefecto();
+    }
   }
 
-  toggleRole(role: string) {
-    if (this.todayRole === role) {
-      // deseleccionar
-      this.todayRole = null;
-      localStorage.removeItem('todayRole');
+  procesarDatosAPI(data: any) {
+    console.log('🔍 DATOS COMPLETOS DE LA API:', data);
+
+    // Asegurarse de que los datos vienen en el formato correcto
+    if (data.usuario) {
+      this.nombreUsuario = data.usuario.nombre || 'Trabajador';
+      this.rolAsignado = data.usuario.rol || 'Sin rol asignado';
+    }
+
+    // Cargar tipos de vehículos desde la API
+    this.tiposVehiculos = data.tipos_vehiculos || [];
+    
+    // Cargar radios disponibles
+    this.radiosDisponibles = data.radios_disponibles || [];
+
+    console.log('✅ Datos procesados:', {
+      tiposVehiculosCount: this.tiposVehiculos.length,
+      tiposVehiculosData: this.tiposVehiculos,
+      radiosCount: this.radiosDisponibles.length,
+      radiosData: this.radiosDisponibles,
+      usuario: this.nombreUsuario,
+      rol: this.rolAsignado,
+    });
+
+    if (this.tiposVehiculos.length === 0) {
+      console.warn('⚠️ No se recibieron tipos de vehículos desde la API');
+      this.cargarTiposVehiculosPorDefecto();
+    }
+
+    if (data.mensaje) {
+      console.log('ℹ️ ' + data.mensaje);
+      this.presentToast(data.mensaje);
+    }
+  }
+
+  cargarTiposVehiculosPorDefecto() {
+    console.log('📋 Cargando tipos de vehículos por defecto...');
+
+    this.tiposVehiculos = [
+      { id_tipo_vehiculo: 1, nombre_tipo_vehiculo: 'Automóvil' },
+      { id_tipo_vehiculo: 2, nombre_tipo_vehiculo: 'Motocicleta' },
+      { id_tipo_vehiculo: 3, nombre_tipo_vehiculo: 'Camioneta' },
+      { id_tipo_vehiculo: 4, nombre_tipo_vehiculo: 'Bicicleta' },
+    ];
+  }
+
+  cargarDatosPorDefecto() {
+    console.log('📋 Cargando todos los datos por defecto...');
+    this.cargarTiposVehiculosPorDefecto();
+
+    this.radiosDisponibles = [
+      {
+        id_radio: 1,
+        nombre_radio: 'Radio 61',
+        codigo_radio: 'SC7',
+        estado_radio: 'Disponible',
+      },
+      {
+        id_radio: 2,
+        nombre_radio: 'Radio 63',
+        codigo_radio: 'SC4',
+        estado_radio: 'Disponible',
+      }
+    ];
+
+    this.presentToast('Usando datos de demostración - Verifique conexión con el servidor');
+  }
+
+  selectTipoVehiculo(tipo: any) {
+    console.log('🚗 Tipo de vehículo seleccionado (botón):', tipo);
+    this.tipoVehiculoSeleccionado = tipo;
+    this.onTipoVehiculoChange();
+  }
+
+  onTipoVehiculoChange() {
+    console.log('🚗 Tipo de vehículo seleccionado:', this.tipoVehiculoSeleccionado);
+
+    if (this.tipoVehiculoSeleccionado) {
+      this.cargarVehiculosPorTipo(this.tipoVehiculoSeleccionado.id_tipo_vehiculo);
+      this.vehiculoSeleccionado = null;
+      this.codigoVehiculoManual = '';
     } else {
-      this.todayRole = role;
-      localStorage.setItem('todayRole', role);
+      this.vehiculosFiltrados = [];
+      this.vehiculoSeleccionado = null;
     }
   }
 
-  // Número del vehículo
-  onVehicleNumberChange(val: string) {
-    this.vehicleNumber = val;
-    if (val) localStorage.setItem('vehicleNumber', val);
-  }
+  async cargarVehiculosPorTipo(tipoVehiculoId: number) {
+    try {
+      console.log('🔍 Cargando vehículos para tipo:', tipoVehiculoId);
 
-  // Ir a la pantalla principal cuando el trabajador esté listo
-  startTrabajo() {
-    // Guardar la frecuencia y la selección en localStorage
-    if (this.radioFrequency) {
-      localStorage.setItem('radioFrequency', this.radioFrequency);
+      const url = `${this.apiService['apiUrl']}/api/trabajador/vehiculos/tipo/${tipoVehiculoId}/`;
+      console.log('🌐 URL de vehículos:', url);
+
+      const data: any = await (this.apiService as any).http.get(url).toPromise();
+
+      this.vehiculosFiltrados = data.vehiculos || [];
+      console.log('✅ Vehículos cargados:', this.vehiculosFiltrados);
+
+      if (this.vehiculosFiltrados.length === 0) {
+        this.vehiculosFiltrados = [
+          {
+            id_vehiculo: null,
+            patente_vehiculo: 'MANUAL',
+            marca_vehiculo: 'Manual',
+            modelo_vehiculo: 'Ingrese código manualmente',
+            codigo_vehiculo: 'MANUAL',
+            es_manual: true
+          },
+        ];
+        this.presentToast('No hay vehículos disponibles, use código manual');
+      }
+    } catch (error) {
+      console.warn('⚠️ No se pudieron cargar vehículos, usando modo manual:', error);
+      this.vehiculosFiltrados = [
+        {
+          id_vehiculo: null,
+          patente_vehiculo: 'MANUAL',
+          marca_vehiculo: 'Manual',
+          modelo_vehiculo: 'Ingrese código manualmente',
+          codigo_vehiculo: 'MANUAL',
+          es_manual: true
+        },
+      ];
+      this.presentToast('Error al cargar vehículos, use código manual');
     }
-    if (this.workOption) {
-      localStorage.setItem('workOption', this.workOption);
+  }
+
+  onVehiculoChange() {
+    console.log('🚙 Vehículo seleccionado:', this.vehiculoSeleccionado);
+
+    if (this.vehiculoSeleccionado && this.vehiculoSeleccionado.es_manual) {
+      this.codigoVehiculoManual = '';
+    } else if (this.vehiculoSeleccionado) {
+      this.codigoVehiculoManual = this.vehiculoSeleccionado.codigo_vehiculo || '';
+    }
+  }
+
+  onCodigoManualChange() {
+    console.log('📝 Código manual cambiado:', this.codigoVehiculoManual);
+
+    if (this.codigoVehiculoManual) {
+      this.vehiculoSeleccionado = null;
+    }
+  }
+
+  // MÉTODO AGREGADO: onRadioChange()
+  onRadioChange() {
+    console.log('📻 Radio seleccionada:', this.radioSeleccionada);
+    
+    // Puedes agregar lógica adicional aquí si es necesario
+    // Por ejemplo, validar que la radio esté disponible
+    if (this.radioSeleccionada && this.radioSeleccionada.estado_radio !== 'Disponible') {
+      this.presentToast(`La radio ${this.radioSeleccionada.nombre_radio} no está disponible`);
+      this.radioSeleccionada = null;
+    }
+  }
+
+  async startTrabajo() {
+    // Verificar si ya tiene turno activo
+    if (this.tieneTurnoActivo) {
+      this.presentToast('Ya tienes un turno activo. No puedes iniciar otro.');
+      return;
     }
 
-    // Generar asignación siempre que tengamos lo necesario
-    this.generateAsignacion();
-    this.presentToast('Turno iniciado. Datos guardados.');
-    // Navegar al mapa (home) para iniciar operaciones en campo
-    this.router.navigate(['/home']);
+    // Verificar que sea trabajador
+    if (!this.apiService.isTrabajador()) {
+      this.presentToast('Solo trabajadores pueden iniciar turnos');
+      return;
+    }
+
+    // Verificar que sea inspector o supervisor
+    const user = this.apiService.getCurrentUser();
+    if (user && user.id_rol !== 3 && user.id_rol !== 4) {
+      this.presentToast('Solo inspectores y supervisores pueden iniciar turnos');
+      return;
+    }
+
+    if (!this.isReadyToStart()) {
+      this.presentToast('Complete todos los campos requeridos');
+      return;
+    }
+
+    let loading: HTMLIonLoadingElement | null = null;
+
+    try {
+      const currentUser = this.apiService.getCurrentUser();
+      if (!currentUser || !currentUser.id) {
+        this.presentToast('Usuario no autenticado');
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      // Mostrar loading
+      loading = await this.loadingCtrl.create({
+        message: 'Iniciando turno...',
+        spinner: 'crescent',
+        backdropDismiss: false,
+      });
+      await loading.present();
+
+      const turnoData = {
+        usuario_id: currentUser.id,
+        tipo_vehiculo_id: this.tipoVehiculoSeleccionado?.id_tipo_vehiculo,
+        vehiculo_id: this.vehiculoSeleccionado?.id_vehiculo,
+        codigo_vehiculo_manual: this.codigoVehiculoManual || null,
+        radio_id: this.radioSeleccionada?.id_radio,
+      };
+
+      console.log('🚀 Enviando datos del turno:', turnoData);
+
+      const url = `${this.apiService['apiUrl']}/api/trabajador/turno/iniciar/`;
+      const response: any = await (this.apiService as any).http.post(url, turnoData, {
+        headers: { 'Content-Type': 'application/json' },
+      }).toPromise();
+
+      console.log('✅ Respuesta del servidor:', response);
+
+      if (loading) {
+        await loading.dismiss();
+        loading = null;
+      }
+
+      if (response.success) {
+        this.presentToast(response.message || 'Turno iniciado correctamente');
+        this.guardarDatosLocalStorage(response);
+
+        // Actualizar estado del turno
+        this.tieneTurnoActivo = true;
+        this.detalleTurnoActivo = response;
+
+        // Navegar al home después de iniciar turno
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 1000);
+      } else {
+        this.presentToast(response.error || 'Error al iniciar turno');
+      }
+    } catch (error: any) {
+      if (loading) {
+        await loading.dismiss();
+        loading = null;
+      }
+
+      console.error('❌ Error del servidor:', error);
+      
+      let errorMessage = 'Error al iniciar turno';
+      
+      // Manejo de errores específicos
+      if (error.error) {
+        if (error.error.error) {
+          errorMessage = error.error.error;
+        } else if (error.error.detail) {
+          errorMessage = error.error.detail;
+        }
+      }
+      
+      this.presentToast(errorMessage);
+
+      // Mostrar más detalles en consola
+      console.log('📋 Detalles del error:', {
+        status: error.status,
+        statusText: error.statusText,
+        url: error.url,
+        error: error.error,
+      });
+    }
   }
 
-  // Validar frecuencia: permitir números, letras y algunos símbolos sencillos (ej: '/', '-') y longitud 2-6
-  isFrequencyValid(): boolean {
-    if (!this.radioFrequency) return false;
-    const v = this.radioFrequency.trim();
-    return /^[0-9A-Za-z\/-]{2,6}$/.test(v);
+  guardarDatosLocalStorage(response: any) {
+    const datosTurno = {
+      fecha: new Date().toISOString(),
+      usuario: this.nombreUsuario,
+      rol: this.rolAsignado,
+      tipo_vehiculo: this.tipoVehiculoSeleccionado?.nombre_tipo_vehiculo,
+      vehiculo: this.vehiculoSeleccionado
+        ? `${this.vehiculoSeleccionado.marca_vehiculo} ${this.vehiculoSeleccionado.modelo_vehiculo} - ${this.vehiculoSeleccionado.patente_vehiculo}`
+        : `Manual: ${this.codigoVehiculoManual}`,
+      radio: this.radioSeleccionada
+        ? `${this.radioSeleccionada.nombre_radio} - ${this.radioSeleccionada.codigo_radio}`
+        : 'No asignada',
+      turno_id: response.turno_id,
+      asignacion_vehiculo_id: response.asignacion_vehiculo_id,
+      asignacion_radio_id: response.asignacion_radio_id,
+      hora_inicio: response.hora_inicio,
+      hora_finalizacion_automatica: response.hora_finalizacion_automatica,
+    };
+
+    localStorage.setItem('turno_actual', JSON.stringify(datosTurno));
+    console.log('💾 Turno guardado en localStorage:', datosTurno);
   }
 
-  // Determina si se puede iniciar el turno
   isReadyToStart(): boolean {
-    // requires role, workOption, valid frequency and optionally valid vehicle number when vehicle selected
-    if (!this.todayRole) return false;
-    if (!this.workOption) return false;
-    if (!this.isFrequencyValid()) return false;
-    // if vehicle selected, ensure vehicleNumber is present and valid
-    if (this.workOption && !this.isVehicleNumberValid()) return false;
+    // Si ya tiene turno activo, no puede iniciar otro
+    if (this.tieneTurnoActivo) {
+      return false;
+    }
+
+    const errores: string[] = [];
+
+    if (!this.rolAsignado || this.rolAsignado === 'Sin rol asignado') {
+      errores.push('Rol no asignado');
+    }
+
+    if (!this.tipoVehiculoSeleccionado) {
+      errores.push('Tipo de vehículo no seleccionado');
+    }
+
+    if (!this.radioSeleccionada) {
+      errores.push('Radio no seleccionada');
+    }
+
+    if (!this.vehiculoSeleccionado && !this.codigoVehiculoManual) {
+      errores.push('Vehículo no seleccionado');
+    }
+
+    if (errores.length > 0) {
+      console.log('❌ Validaciones fallidas:', errores);
+      return false;
+    }
+
     return true;
   }
 
-  // Validar número de vehículo: permitir números y letras, 1-10 caracteres
-  isVehicleNumberValid(): boolean {
-    if (!this.workOption) return true; // no requiere número si no hay vehículo
-    if (!this.vehicleNumber) return false;
-    const v = this.vehicleNumber.trim();
-    return /^[0-9A-Za-z-]{1,10}$/.test(v);
-  }
-
-  // Seleccionar radio
-  selectRadio(r: { label: string; code: string }) {
-    this.radioSelected = r;
-    localStorage.setItem('radioSelected', JSON.stringify(r));
-  }
-
-  // Permitir al usuario escribir la frecuencia manualmente
-  onFrequencyChange(value: string) {
-    this.radioFrequency = value;
-    localStorage.setItem('radioFrequency', value);
-  }
-
-  // Cambiar radio (reset)
-  changeRadio() {
-    this.radioSelected = null;
-    localStorage.removeItem('radioSelected');
-  }
-
-  // Genera la estructura de asignación y la guarda en localStorage
-  generateAsignacion() {
-    const now = new Date();
-    const fecha = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
-    const hora = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
-
-    const asignacion = {
-      OPERADOR1: this.nombreUsuario || '-',
-      OPERADOR2: '-',
-      FECHA: fecha,
-      TURNO: localStorage.getItem('turno') || 'Turno .3',
-      HORA: hora,
-      CONDUCTOR: this.nombreUsuario || '-',
-      MOVIL: this.workOption || '-',
-      NUMERO_MOVIL: this.vehicleNumber || '',
-      ROL: this.todayRole || '',
-      PORTATIL: this.radioSelected?.label || '',
-      CODIGO_RADIO: this.radioSelected?.code || '',
-      LLAVES: '',
-      CUADRANTE: '',
-      OBSERVACION: 'Término',
-    };
-
-    const arr = JSON.parse(localStorage.getItem('asignaciones') || '[]');
-    arr.push(asignacion);
-    localStorage.setItem('asignaciones', JSON.stringify(arr));
-    localStorage.setItem('ultimaAsignacion', JSON.stringify(asignacion));
-  }
-
   async presentToast(message: string) {
-    const t = await this.toastCtrl.create({
+    const toast = await this.toastCtrl.create({
       message,
-      duration: 2000,
+      duration: 3000,
       position: 'bottom',
     });
-    await t.present();
+    await toast.present();
   }
 
-  // Permitir al usuario cambiar vehículo (resetear la selección)
-  changeVehicle() {
-    this.workOption = null;
-    localStorage.removeItem('workOption');
+  ionViewWillEnter() {
+    // Verificar autenticación usando ApiService
+    if (!this.apiService.isAuthenticated()) {
+      this.presentToast('No tienes permisos para acceder a esta sección');
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    // Verificar que sea trabajador
+    if (!this.apiService.isTrabajador()) {
+      this.presentToast('Solo trabajadores pueden acceder a esta sección');
+      this.router.navigate(['/home']);
+      return;
+    }
+
+    // Verificar rol específico (inspector o supervisor)
+    const user = this.apiService.getCurrentUser();
+    if (user && user.id_rol !== 3 && user.id_rol !== 4) {
+      this.presentToast('Solo inspectores y supervisores pueden iniciar turnos');
+      this.router.navigate(['/home']);
+    }
+  }
+
+  // Método para limpiar selección de tipo de vehículo
+  limpiarTipoVehiculo() {
+    this.tipoVehiculoSeleccionado = null;
+    this.vehiculosFiltrados = [];
+    this.vehiculoSeleccionado = null;
+    this.codigoVehiculoManual = '';
+  }
+
+  // Método para limpiar selección de radio
+  limpiarRadio() {
+    this.radioSeleccionada = null;
   }
 }

@@ -13,7 +13,7 @@ import { TrabajadorPage } from './trabajador.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    TrabajadorPageRoutingModule,
+    TrabajadorPageRoutingModule
   ],
   declarations: [TrabajadorPage]
 })

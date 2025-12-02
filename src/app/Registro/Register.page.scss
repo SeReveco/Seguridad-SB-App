@@ -1,0 +1,183 @@
+/* Fondo verde claro en esta página */
+:host {
+  ion-content {
+    --background: #e5f2ec;
+  }
+}
+
+/* ───────── Header azul ───────── */
+
+.register-toolbar {
+  --background: #00aef0;  // azul claro del header
+  --color: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.register-toolbar ion-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  column-gap: 8px;
+}
+
+.toolbar-logo {
+  height: 40px;
+  width: 40px;
+  border-radius: 4px;
+  object-fit: contain;
+}
+
+.register-toolbar ion-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+/* ───────── Layout principal ───────── */
+
+.register-page {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px 32px;
+}
+
+/* Tarjeta blanca central */
+
+.register-card {
+  width: 100%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 24px 24px 28px;
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+}
+
+.register-title {
+  margin: 0 0 16px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1c1c1c;
+}
+
+/* ───────── Inputs blancos estilo tarjeta ───────── */
+
+.register-item {
+  margin-bottom: 12px;
+
+  --background: #ffffff;
+  --color: #333333;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+
+  border-radius: 10px;
+  border: 1px solid #e0e4f1;
+}
+
+/* quitar cualquier línea interna de ion-item */
+.register-item::part(native) {
+  border-radius: 10px;
+}
+
+.register-item ion-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #404040;
+}
+
+.register-item ion-input {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --color: #333333;
+  --placeholder-color: #a0a6b5;
+}
+
+/* ───────── Mensaje de error ───────── */
+
+.error-message {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  text-align: center;
+  color: #c62828;
+  background: rgba(198, 40, 40, 0.08);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+/* ───────── Botón “Registrarse” ───────── */
+
+.register-button {
+  margin-top: 12px;
+  font-weight: 700;
+  text-transform: none;
+
+  --border-radius: 10px;
+  --background: #0057d9;
+  --background-hover: #0049b8;
+  --background-activated: #0049b8;
+  --color: #ffffff;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+
+.register-button::part(native) {
+  font-size: 1rem;
+}
+
+.register-spinner {
+  margin-right: 8px;
+}
+
+/* ───────── Link para ir a login ───────── */
+
+.register-link {
+  margin-top: 10px;
+  width: 100%;
+  text-align: center;
+  background: transparent;
+  border: none;
+  padding: 8px 0 0;
+  font-size: 0.9rem;
+  color: #333333;
+}
+
+.register-link span {
+  color: #0057d9;
+  font-weight: 600;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+  color: #0057d9;
+}
+
+/* ───────── Logo inferior ───────── */
+
+.register-footer-logo {
+  margin-top: 24px;
+}
+
+.register-footer-logo img {
+  max-width: 220px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ───────── Responsive ───────── */
+
+@media (max-width: 480px) {
+  .register-card {
+    padding-inline: 18px;
+    margin-top: 12px;
+  }
+
+  .register-title {
+    font-size: 1.3rem;
+  }
+}

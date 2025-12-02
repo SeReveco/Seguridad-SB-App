@@ -1,87 +1,104 @@
 <ion-header>
-	<ion-toolbar color="primary">
-		<ion-title>
-			<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-			<img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo"
-				style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
-			Trabajador
-		</ion-title>
-	</ion-toolbar>
+  <ion-toolbar color="primary">
+    <ion-title>
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <img src="assets/Img/Logo_San_Bernardo.png" alt="Logo San Bernardo"
+        style="height: 50px; width: 50px; margin-right: 8px; vertical-align: middle; border-radius: 4px;" />
+      Trabajador
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-	<div style="text-align:center; margin-top: 24px;">
-		<h2>Bienvenido, {{ nombreUsuario || 'Trabajador' }}</h2>
-		<div class="selected-info" style="margin-top:6px;">
-			<p style="font-size: 1.05rem; margin: 0;">Rol seleccionado:</p>
-			<p style="font-size: 1.15rem; margin: 0; font-weight:700;">{{ todayRole || 'No seleccionado' }}</p>
-		</div>
+  <div class="welcome-container">
+    <h2 class="welcome-title">Bienvenido, {{ nombreUsuario || 'Trabajador' }}</h2>
+    
+    <!-- Mostrar rol asignado (no seleccionable) -->
+    <div class="selected-info">
+      <p class="info-label">Rol asignado:</p>
+      <p class="info-value role-value">
+        {{ rolAsignado || 'No asignado' }}
+      </p>
+    </div>
 
-		<div style="margin-top: 12px;">
-			<!-- Selector de rol de hoy: dos botones azules -->
-			<div class="role-buttons-wrapper">
-				<div class="role-buttons">
-					<ion-button class="role-btn" fill="solid" color="primary" [class.active]="todayRole === 'Conductor'"
-						(click)="toggleRole('Conductor')"
-						[attr.aria-pressed]="todayRole === 'Conductor'">Conductor</ion-button>
-					<ion-button class="role-btn" fill="solid" color="primary" [class.active]="todayRole === 'Inspector'"
-						(click)="toggleRole('Inspector')"
-						[attr.aria-pressed]="todayRole === 'Inspector'">Inspector</ion-button>
-				</div>
-			</div>
+    <div class="content-section">
+      <!-- Información del tipo de vehículo seleccionado -->
+      <div class="selected-info">
+        <p class="info-label">Tipo de vehículo seleccionado:</p>
+        <p class="info-value vehicle-value">
+          {{ tipoVehiculoSeleccionado?.nombre_tipo_vehiculo || 'No seleccionado' }}
+        </p>
+      </div>
 
-			<div class="selected-info" style="margin-top:8px;">
-				<p style="font-size: 1.05rem; margin: 0;">Transporte seleccionado:</p>
-				<p style="font-size: 1.15rem; margin: 0; font-weight:700;">{{ workOption || 'No seleccionado' }}</p>
-			</div>
+      <!-- Botones para tipos de vehículos -->
+      <div class="vehicle-selection">
+        <ion-grid>
+          <ion-row class="vehicle-row">
+            <ion-col size="6" *ngFor="let tipo of tiposVehiculos">
+              <ion-card [class.selected]="tipoVehiculoSeleccionado?.id_tipo_vehiculo === tipo.id_tipo_vehiculo"
+                  class="vehicle-card" button (click)="selectTipoVehiculo(tipo)">
+                <ion-card-content class="vehicle-card-content">
+                  <!-- Iconos según el tipo de vehículo -->
+                  <ion-icon *ngIf="tipo.nombre_tipo_vehiculo === 'Auto'" name="car-sport" class="vehicle-icon"></ion-icon>
+                  <ion-icon *ngIf="tipo.nombre_tipo_vehiculo === 'Motocicleta'" name="bicycle" class="vehicle-icon"></ion-icon>
+                  <ion-icon *ngIf="tipo.nombre_tipo_vehiculo === 'Camioneta'" name="car" class="vehicle-icon"></ion-icon>
+                  <ion-icon *ngIf="tipo.nombre_tipo_vehiculo === 'Bicicleta'" name="bicycle" class="vehicle-icon"></ion-icon>
+                  
+                  <div class="vehicle-title">{{ tipo.nombre_tipo_vehiculo }}</div>
+                </ion-card-content>
+              </ion-card>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </div>
 
-			<ion-grid>
-				<ion-row class="vehicle-row">
-					<ion-col size="6" *ngFor="let v of vehicles">
-						<ion-card [class.selected]="workOption === v.key" [class.vehicle-moto]="v.key === 'Moto'"
-							class="vehicle-card" button (click)="selectWorkOption(v.key)">
-							<ion-card-content class="vehicle-card-content">
-								<!-- Iconos Ionic -->
-								<ion-icon *ngIf="v.icon && !v.faIcon" [name]="v.icon" class="vehicle-icon"></ion-icon>
+      <!-- Selector de vehículo (se filtra según tipo seleccionado) -->
+      <div *ngIf="tipoVehiculoSeleccionado" class="form-section">
+        <ion-item class="form-item">
+          <ion-label position="stacked" class="form-label">Seleccionar vehículo *</ion-label>
+          <ion-select [(ngModel)]="vehiculoSeleccionado" (ionChange)="onVehiculoChange()"
+              interface="action-sheet" placeholder="Seleccione vehículo" class="form-select">
+            <ion-select-option *ngFor="let vehiculo of vehiculosFiltrados" [value]="vehiculo">
+              {{ vehiculo.patente_vehiculo }} - {{ vehiculo.marca_vehiculo }} {{ vehiculo.modelo_vehiculo }}
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        
+        <!-- Opción para escribir manualmente el código -->
+        <div *ngIf="!vehiculoSeleccionado || vehiculoSeleccionado?.codigo_vehiculo === 'MANUAL'" class="manual-input-section">
+          <ion-item class="form-item">
+            <ion-label position="stacked" class="form-label">O escribir código manualmente</ion-label>
+            <ion-input [(ngModel)]="codigoVehiculoManual" (ionInput)="onCodigoManualChange()" 
+                placeholder="Ej: VH-001" maxlength="20" class="form-input"></ion-input>
+          </ion-item>
+        </div>
+      </div>
 
-								<!-- Iconos FontAwesome -->
-								<i *ngIf="v.faIcon" [class]="v.faIcon" class="vehicle-icon fa-icon"></i>
+      <!-- Selector de radio disponible -->
+      <div class="form-section">
+        <ion-item class="form-item">
+          <ion-label position="stacked" class="form-label">Seleccionar radio disponible *</ion-label>
+          <ion-select [(ngModel)]="radioSeleccionada" (ionChange)="onRadioChange()"
+              interface="action-sheet" placeholder="Seleccione una radio" class="form-select">
+            <ion-select-option *ngFor="let radio of radiosDisponibles" [value]="radio">
+              {{ radio.nombre_radio }} ({{ radio.codigo_radio }})
+            </ion-select-option>
+          </ion-select>
+        </ion-item>
+        
+        <!-- Mostrar radio seleccionada -->
+        <div *ngIf="radioSeleccionada" class="selected-display">
+          <p class="selected-text">
+            Radio seleccionada: <strong>{{ radioSeleccionada.nombre_radio }}</strong>
+          </p>
+        </div>
+      </div>
 
-								<img *ngIf="v.img" [src]="v.img" [alt]="v.label" class="vehicle-image" />
-								<div class="vehicle-title">{{ v.label }}</div>
-							</ion-card-content>
-						</ion-card>
-					</ion-col>
-				</ion-row>
-			</ion-grid>
-
-			<!-- Campo para escribir la frecuencia de radio -->
-
-			<!-- Campo Número del vehículo: aparece después de seleccionar vehículo -->
-			<div *ngIf="workOption" style="margin-top: 12px; max-width: 420px; margin-left: auto; margin-right: auto;">
-				<ion-item>
-					<ion-label position="stacked">Número del vehículo</ion-label>
-					<ion-input #vehicleNumberInput [(ngModel)]="vehicleNumber" placeholder="Ej: 1234" maxlength="10"
-						(ngModelChange)="onVehicleNumberChange($event)"></ion-input>
-				</ion-item>
-				<div *ngIf="vehicleNumber && !isVehicleNumberValid()"
-					style="color:#ff4d4f; font-size:0.9rem; margin-top:6px;">Número inválido</div>
-			</div>
-
-			<div style="margin-top: 14px; max-width: 420px; margin-left: auto; margin-right: auto;">
-				<ion-item>
-					<ion-label position="stacked">Frecuencia de radio</ion-label>
-					<ion-input [(ngModel)]="radioFrequency" (ngModelChange)="onFrequencyChange($event)"
-						placeholder="Ej: 61 / 102 / 628"></ion-input>
-				</ion-item>
-				<div *ngIf="radioFrequency && !isFrequencyValid()"
-					style="color:#ff4d4f; font-size:0.9rem; margin-top:6px;">Formato inválido de frecuencia</div>
-			</div>
-
-			<div style="margin-top:12px; max-width: 420px; margin-left: auto; margin-right: auto;">
-				<ion-button expand="block" color="primary" (click)="startTrabajo()"
-					[disabled]="!isReadyToStart()">Iniciar turno</ion-button>
-			</div>
-		</div>
-	</div>
+      <!-- Botón para iniciar turno -->
+      <div class="action-section">
+        <ion-button expand="block" color="primary" (click)="startTrabajo()"
+          [disabled]="!isReadyToStart()" class="start-button">Iniciar turno</ion-button>
+      </div>
+    </div>
+  </div>
 </ion-content>
