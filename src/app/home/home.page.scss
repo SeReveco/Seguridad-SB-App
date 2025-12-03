@@ -14,32 +14,35 @@ ion-content {
   top: 0;
   left: 0;
   right: 0;
-  bottom: 56px; // alto del footer aproximado
+  bottom: 56px; // alto aprox del footer
   width: 100%;
 }
 
 /* ===== BARRA FLOTANTE: REPORTAR + GPS ===== */
+/* Centramos dentro de la pantalla y limitamos el ancho
+   para que no se salga del dispositivo */
 .reportar-wrapper {
   position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 78px; /* justo sobre el footer */
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 80px; /* justo sobre el footer */
+  width: 100%;
+  max-width: 420px; /* ancho máximo, similar al mapa */
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   gap: 10px;
+  padding: 0 12px;
   z-index: 1000;
-  padding: 0 16px;
 }
 
 .reportar-btn {
-  flex: 1;
-  max-width: 360px;
-  --border-radius: 25px;
-  --background: #0057d9; /* azul más oscuro para destacar */
-  --box-shadow: 0 4px 16px rgba(0, 87, 217, 0.35);
-  font-weight: 700;
+  flex: 1 1 auto;
+  --background: #009fe3; /* MISMO CELESTE DEL FOOTER */
+  --border-radius: 24px;
+  --box-shadow: 0 4px 16px rgba(0, 159, 227, 0.35);
   margin: 0;
+  font-weight: 700;
 
   &::part(native) {
     color: #fff !important;
@@ -47,11 +50,13 @@ ion-content {
   }
 }
 
+/* Botón redondo de GPS, alineado al mismo nivel */
 .gps-btn {
+  flex: 0 0 44px;
   width: 44px;
   height: 44px;
+  --background: #009fe3; /* mismo celeste que el footer */
   border-radius: 50%;
-  --background: #009fe3; /* mismo celeste que la barra */
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
   padding: 0;
   margin: 0;
@@ -97,12 +102,8 @@ ion-content {
   margin-top: 16px;
 }
 
-/* ===== ESTILOS LEAFLET IMPORTANTES ===== */
-.ubicacion-actual-marker {
-  background: transparent !important;
-  border: none !important;
-}
-
+/* ===== ESTILOS LEAFLET BÁSICOS ===== */
+.ubicacion-actual-marker,
 .alerta-marker {
   background: transparent !important;
   border: none !important;
@@ -169,83 +170,70 @@ ion-content {
   font-size: 10px !important;
 }
 
-/* ===== FOOTER / NAV INFERIOR ===== */
-ion-footer {
-  ion-toolbar {
-    --background: #009fe3; /* celeste de la maqueta */
-    --min-height: 56px;
+/* ================================================
+   FOOTER / NAV INFERIOR
+=================================================== */
 
-    > div {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-end;
-      justify-content: center;
-      width: 100%;
-      gap: 1cm;
-    }
+.bottom-toolbar {
+  --background: #009fe3;
+  --min-height: 48px;
+
+  .footer-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 2px 0 !important;
   }
 }
 
+/* Contenedor interno icono + texto (columna) */
 .footer-button {
-  --color: white;
   --background: transparent;
+  --color: #ffffff;
+}
+
+.footer-button-inner {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
-
-  ion-icon {
-    font-size: 24px;
-    color: #fff;
-  }
-
-  span {
-    font-size: 12px;
-    color: #fff;
-    margin-top: 2px;
-    text-align: center;
-    width: 100%;
-  }
+  justify-content: center;
+  padding: 4px 6px;
 }
 
-/* Indicador de pestaña activa (opcional, si usas routerLinkActive="active-tab") */
-.footer-button.active-tab::after {
+.footer-button-inner ion-icon {
+  font-size: 24px;
+  margin-bottom: 2px;
+  color: #ffffff;
+}
+
+.footer-button-inner span {
+  font-size: 13px;
+  line-height: 14px;
+  color: #ffffff;
+}
+
+/* Indicador del tab activo */
+.footer-button.active-tab .footer-button-inner::after {
   content: "";
-  position: absolute;
-  bottom: 4px; /* dentro del footer, sin salirse */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 70%;
-  height: 4px;
+  display: block;
+  width: 60%;
+  height: 3px;
   background: #ffffff;
   border-radius: 4px;
+  margin-top: 4px;
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
-  .reportar-wrapper {
-    bottom: 76px;
-  }
-
-  .reportar-btn {
-    width: 80%;
-  }
-}
-
 @media (max-width: 480px) {
   .reportar-wrapper {
-    bottom: 74px;
-    padding: 0 12px;
+    bottom: 78px;
+    max-width: 380px;
+    padding: 0 10px;
   }
 
   .reportar-btn {
     font-size: 14px;
-  }
-
-  ion-footer {
-    ion-toolbar > div {
-      gap: 0.5cm;
-    }
   }
 }
 
@@ -277,7 +265,7 @@ ion-footer {
   animation: pulse 0.2s ease-in-out;
 }
 
-/* Efecto general para ion-button */
+/* Pequeño efecto general para todos los ion-button */
 ion-button {
   transition: all 0.2s ease-in-out;
 
