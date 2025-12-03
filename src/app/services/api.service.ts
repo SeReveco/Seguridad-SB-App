@@ -109,6 +109,11 @@ export class ApiService {
     return user?.user_type === 'trabajador';
   }
 
+  getTipoUsuario(): 'ciudadano' | 'trabajador' | null {
+    const user = this.getCurrentUser();
+    return user ? user.user_type : null;
+  }
+
   // 🎯 CHECK ROLES Y ACCESOS
   canAccessApp(): boolean {
     const user = this.getCurrentUser();

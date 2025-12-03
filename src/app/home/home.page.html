@@ -4,31 +4,28 @@
     <!-- MAPA -->
     <div id="map"></div>
 
-    <!-- Barra flotante: REPORTAR + GPS -->
+    <!-- BARRA FLOTANTE: REPORTAR + GPS -->
     <div class="reportar-wrapper">
       <ion-button
-        color="primary"
         expand="block"
         class="reportar-btn"
         (click)="abrirFormulario()">
         <ion-icon name="megaphone-outline" slot="start"></ion-icon>
-        Reportar
+        Denunciar
       </ion-button>
 
       <ion-button
-        shape="round"
-        color="primary"
         class="gps-btn"
         (click)="goToUbicacionActual()">
         <ion-icon name="locate-outline" slot="icon-only"></ion-icon>
       </ion-button>
     </div>
 
-    <!-- MODAL FORMULARIO -->
+    <!-- MODAL FORMULARIO (puede ser denuncia/alerta, como tú prefieras) -->
     <ion-modal [isOpen]="mostrarFormulario" (didDismiss)="cerrarFormulario()">
       <ng-template>
         <div class="reportar-form-container">
-          <form (ngSubmit)="enviarAlerta()" #alertaForm="ngForm">
+          <form (ngSubmit)="enviarDenuncia()" #alertaForm="ngForm">
 
             <ion-item>
               <ion-label position="floating">Solicitante (opcional)</ion-label>
@@ -60,10 +57,9 @@
             <div class="form-buttons">
               <ion-button
                 type="submit"
-                color="primary"
                 [disabled]="!alertaForm.form.valid">
                 <ion-icon name="megaphone-outline" slot="start"></ion-icon>
-                Reportar Alerta
+                Denunciar
               </ion-button>
 
               <ion-button
@@ -81,52 +77,59 @@
   </div>
 </ion-content>
 
-<!-- FOOTER / NAV -->
+<!-- FOOTER / NAV INFERIOR -->
 <ion-footer>
-  <ion-toolbar color="primary">
-    <div>
-      <div>
-        <ion-button
-          fill="clear"
-          routerLink="/home"
-          routerLinkActive="active-tab"
-          class="footer-button">
+  <ion-toolbar class="bottom-toolbar">
+    <div class="footer-nav">
+
+      <!-- MAPA (todos) -->
+      <ion-button
+        fill="clear"
+        routerLink="/home"
+        routerLinkActive="active-tab"
+        class="footer-button">
+        <div class="footer-button-inner">
           <ion-icon name="map-outline"></ion-icon>
           <span>Mapa</span>
-        </ion-button>
-      </div>
+        </div>
+      </ion-button>
 
-      <div>
-        <ion-button
-          fill="clear"
-          routerLink="/alerta"
-          routerLinkActive="active-tab"
-          class="footer-button">
-          <ion-icon name="megaphone-outline"></ion-icon>
-          <span>Alerta</span>
-        </ion-button>
-      </div>
+      <!-- FISCALIZACIÓN: SOLO trabajadores -->
+      <ion-button
+        *ngIf="tipoUsuario === 'trabajador'"
+        fill="clear"
+        routerLink="/fiscalizacion"
+        routerLinkActive="active-tab"
+        class="footer-button">
+        <div class="footer-button-inner">
+          <ion-icon name="alert-circle-outline"></ion-icon>
+          <span>Fiscalización</span>
+        </div>
+      </ion-button>
 
-      <div>
-        <ion-button
-          fill="clear"
-          routerLink="/solicitud"
-          routerLinkActive="active-tab"
-          class="footer-button">
+      <!-- SOLICITUD (todos) -->
+      <ion-button
+        fill="clear"
+        routerLink="/solicitud"
+        routerLinkActive="active-tab"
+        class="footer-button">
+        <div class="footer-button-inner">
           <ion-icon name="document-text-outline"></ion-icon>
           <span>Solicitud</span>
-        </ion-button>
-      </div>
+        </div>
+      </ion-button>
 
-      <div>
-        <ion-button
-          fill="clear"
-          (click)="openMenu()"
-          class="footer-button">
+      <!-- MENÚ (todos) -->
+      <ion-button
+        fill="clear"
+        (click)="openMenu()"
+        class="footer-button">
+        <div class="footer-button-inner">
           <ion-icon name="menu-outline"></ion-icon>
           <span>Menú</span>
-        </ion-button>
-      </div>
+        </div>
+      </ion-button>
+
     </div>
   </ion-toolbar>
 </ion-footer>
