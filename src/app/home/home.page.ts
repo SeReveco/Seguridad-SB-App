@@ -22,10 +22,7 @@ export class HomePage implements AfterViewInit {
   tipo: string = '';
   descripcion: string = '';
 
-  constructor(
-    private menuController: MenuController,
-    private router: Router
-  ) {}
+  constructor(private menuController: MenuController, private router: Router) {}
 
   async openMenu() {
     await this.menuController.open();
@@ -36,25 +33,38 @@ export class HomePage implements AfterViewInit {
   }
 
   private initMap(): void {
-    // Inicializar el mapa
-    this.map = L.map('map').setView([-33.592, -70.700], 13);
-    
-    // Agregar capa de tiles
+    this.map = L.map('map').setView([-33.592, -70.7], 13);
+
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
+      attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 
-    // Agregar eventos del mapa
+    // 👇 IMPORTANTE: ajustar el tamaño después de que Angular pinte todo
+    setTimeout(() => {
+      this.map.invalidateSize();
+    }, 300);
+
     this.map.on('click', (e: L.LeafletMouseEvent) => {
       this.onMapClick(e);
+    });
+
+    // Opcional: si gira la pantalla o cambia tamaño
+    window.addEventListener('resize', () => {
+      this.map.invalidateSize();
     });
   }
 
   private onMapClick(e: L.LeafletMouseEvent): void {
     // Puedes agregar un marcador al hacer click en el mapa
     const marker = L.marker(e.latlng).addTo(this.map);
-    marker.bindPopup(`Ubicación seleccionada:<br>Lat: ${e.latlng.lat.toFixed(6)}<br>Lng: ${e.latlng.lng.toFixed(6)}`).openPopup();
-    
+    marker
+      .bindPopup(
+        `Ubicación seleccionada:<br>Lat: ${e.latlng.lat.toFixed(
+          6
+        )}<br>Lng: ${e.latlng.lng.toFixed(6)}`
+      )
+      .openPopup();
+
     // Actualizar la ubicación en el formulario si está abierto
     this.ubicacion = `${e.latlng.lat.toFixed(6)}, ${e.latlng.lng.toFixed(6)}`;
   }
@@ -65,42 +75,47 @@ export class HomePage implements AfterViewInit {
         (position) => {
           const lat = position.coords.latitude;
           const lng = position.coords.longitude;
-          
+
           // Centrar mapa en la ubicación actual
           this.map.setView([lat, lng], 17, { animate: true });
-          
+
           // Crear icono personalizado para ubicación actual
           const iconUbicacion = L.divIcon({
             html: '<div style="background-color: #3880ff; width: 20px; height: 20px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.3);"></div>',
             className: 'ubicacion-actual-marker',
             iconSize: [20, 20],
-            iconAnchor: [10, 10]
+            iconAnchor: [10, 10],
           });
-          
+
           // Limpiar marcadores anteriores de ubicación
           this.map.eachLayer((layer: any) => {
-            if (layer instanceof L.Marker && layer.options.icon === iconUbicacion) {
+            if (
+              layer instanceof L.Marker &&
+              layer.options.icon === iconUbicacion
+            ) {
               this.map.removeLayer(layer);
             }
           });
-          
+
           // Agregar nuevo marcador
           L.marker([lat, lng], { icon: iconUbicacion })
             .addTo(this.map)
             .bindPopup('Tu ubicación actual')
             .openPopup();
-            
+
           // Actualizar ubicación en formulario
           this.ubicacion = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
         },
         (error) => {
           console.error('Error obteniendo ubicación:', error);
-          alert('No se pudo obtener la ubicación actual. Asegúrate de tener el GPS activado.');
+          alert(
+            'No se pudo obtener la ubicación actual. Asegúrate de tener el GPS activado.'
+          );
         },
         {
           enableHighAccuracy: true,
           timeout: 10000,
-          maximumAge: 60000
+          maximumAge: 60000,
         }
       );
     } else {
@@ -165,7 +180,9 @@ export class HomePage implements AfterViewInit {
     }
 
     try {
-      const solicitanteFinal = this.solicitante.trim() ? this.solicitante : 'Anónimo';
+      const solicitanteFinal = this.solicitante.trim()
+        ? this.solicitante
+        : 'Anónimo';
       const ahora = new Date();
       const fecha = ahora.toLocaleDateString('es-CL');
       const hora = ahora.toLocaleTimeString('es-CL');
@@ -180,7 +197,9 @@ export class HomePage implements AfterViewInit {
         descripcion: this.descripcion,
         fecha,
         hora,
-        coordenadas: this.ubicacion.split(',').map(coord => parseFloat(coord.trim()))
+        coordenadas: this.ubicacion
+          .split(',')
+          .map((coord) => parseFloat(coord.trim())),
       };
 
       // Agregar a la lista de alertas
@@ -194,7 +213,6 @@ export class HomePage implements AfterViewInit {
 
       // Cerrar formulario
       this.cerrarFormulario();
-
     } catch (error) {
       console.error('Error al enviar alerta:', error);
       alert('Error al enviar la alerta. Intenta nuevamente.');
@@ -203,18 +221,18 @@ export class HomePage implements AfterViewInit {
 
   private agregarMarcadorAlerta(alerta: any): void {
     const [lat, lng] = alerta.coordenadas;
-    
+
     // Crear icono personalizado para alertas
     const iconAlerta = L.divIcon({
       html: '<div style="background-color: #ff3b30; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.3);"></div>',
       className: 'alerta-marker',
       iconSize: [16, 16],
-      iconAnchor: [8, 8]
+      iconAnchor: [8, 8],
     });
 
     // Agregar marcador al mapa
     const marker = L.marker([lat, lng], { icon: iconAlerta }).addTo(this.map);
-    
+
     // Crear contenido del popup
     const popupContent = `
       <div style="min-width: 200px;">

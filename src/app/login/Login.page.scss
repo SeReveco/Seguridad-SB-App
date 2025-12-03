@@ -8,30 +8,39 @@
 /* ───────── Barra superior (azul claro) ───────── */
 
 .login-toolbar {
-  --background: #00aef0; // azul claro tipo banner de la imagen
+  --background: #00aef0;
   --color: #ffffff;
 
+  height: 60px;                  /* Mantiene el alto original */
+  position: relative;            /* Para posicionar logo y texto */
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding-inline: 16px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  justify-content: center;       /* Centro real */
 }
 
+/* Logo a la izquierda, centrado verticalmente */
 .login-toolbar .logo {
-  height: 42px;
-  width: 42px;
-  margin-right: 8px;
-  border-radius: 4px;
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 70%;                   /* Proporción equilibrada */
+  width: auto;
   object-fit: contain;
 }
 
+/* Texto REALMENTE centrado */
 .toolbar-title {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
   font-weight: 700;
-  font-size: 1.4rem;
+  font-size: 1.7rem;             /* Más grande pero equilibrado */
   text-align: center;
+  white-space: nowrap;           /* Evita saltos innecesarios */
 }
-
 /* ───────── Layout principal ───────── */
 
 .login-container {
@@ -130,7 +139,8 @@ ion-list {
 }
 
 .register-link a {
-  color: #0057d9; /* azul del botón / link de la maqueta */
+  color: #0057d9;
+  /* azul del botón / link de la maqueta */
   font-weight: 600;
   text-decoration: underline;
   cursor: pointer;
@@ -144,7 +154,7 @@ ion-list {
   text-transform: none;
 
   --border-radius: 10px;
-  --background: #0057d9;      
+  --background: #0057d9;
   --background-hover: #0049b8;
   --background-activated: #0049b8;
   --color: #ffffff;

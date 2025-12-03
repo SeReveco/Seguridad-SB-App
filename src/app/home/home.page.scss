@@ -1,78 +1,64 @@
+/* ===== FONDO GENERAL ===== */
 ion-content {
-  --background: #f8f9fa;
+  --background: transparent;
 }
 
-#page-content {
-  display: flex;
-  flex-direction: column;
+.page-content {
+  position: relative;
   height: 100%;
 }
 
-#container {
-  text-align: center;
-  padding: 16px;
-  flex: 0 0 auto;
-  position: static;
-  transform: none;
-}
-
+/* MAPA: ocupa todo hasta el footer */
 #map {
-  flex: 1 1 auto;
-  width: 100vw;
-  min-height: 200px;
-  height: calc(100vh - 56px - 56px - 56px); /* header + reportar + footer (aprox) */
-  position: relative;
-  margin-bottom: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 56px; // alto del footer aproximado
+  width: 100%;
 }
 
-/* ===== BOTONES FLOTANTES ===== */
-.reportar-btn-container {
+/* ===== BARRA FLOTANTE: REPORTAR + GPS ===== */
+.reportar-wrapper {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 80px; /* encima del footer */
+  bottom: 78px; /* justo sobre el footer */
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 16px;
+  gap: 10px;
   z-index: 1000;
   padding: 0 16px;
 }
 
 .reportar-btn {
-  width: calc(100vw - 4cm - 56px - 16px);
-  max-width: 400px;
-  margin: 0;
+  flex: 1;
+  max-width: 360px;
   --border-radius: 25px;
-  --box-shadow: 0 4px 16px rgba(56, 128, 255, 0.3);
-  font-weight: 600;
-  
+  --background: #0057d9; /* azul más oscuro para destacar */
+  --box-shadow: 0 4px 16px rgba(0, 87, 217, 0.35);
+  font-weight: 700;
+  margin: 0;
+
   &::part(native) {
     color: #fff !important;
-    font-weight: bold;
+    font-weight: 700;
   }
 }
 
-.gps-btn-container {
-  position: fixed;
-  right: 2cm;
-  bottom: 90px;
-  z-index: 1001;
-}
-
 .gps-btn {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  --background: #009fe3; /* mismo celeste que la barra */
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
   padding: 0;
-  --box-shadow: 0 4px 16px rgba(56, 128, 255, 0.3);
-  
+  margin: 0;
+
   ion-icon {
     color: #fff !important;
+    font-size: 22px;
   }
 }
 
@@ -84,25 +70,34 @@ ion-content {
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  
+  animation: fadeIn 0.3s ease-out;
+
   ion-item {
     --border-radius: 12px;
     --background: #f8f9fa;
     margin-bottom: 16px;
-    
+
     ion-label {
       color: #495057;
       font-weight: 500;
     }
-    
-    ion-input, ion-textarea {
+
+    ion-input,
+    ion-textarea {
       --padding-start: 12px;
       --padding-end: 12px;
     }
   }
 }
 
-/* ===== ESTILOS LEAFLET ===== */
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* ===== ESTILOS LEAFLET IMPORTANTES ===== */
 .ubicacion-actual-marker {
   background: transparent !important;
   border: none !important;
@@ -113,27 +108,27 @@ ion-content {
   border: none !important;
 }
 
-/* Personalizar popups de Leaflet */
 .leaflet-popup-content-wrapper {
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-  
+
   .leaflet-popup-content {
     margin: 12px 16px;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
     line-height: 1.4;
-    
+
     strong {
       color: #2f3542;
       font-size: 14px;
     }
-    
+
     small {
       color: #747d8c;
       font-size: 12px;
     }
-    
+
     hr {
       border: none;
       border-top: 1px solid #e9ecef;
@@ -146,19 +141,41 @@ ion-content {
   background: #fff;
 }
 
-/* Corregir iconos de marcadores Leaflet */
 .leaflet-marker-icon {
   margin-left: -8px !important;
   margin-top: -8px !important;
 }
 
-/* ===== FOOTER ===== */
+.leaflet-control-zoom {
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+
+  a {
+    background: #fff !important;
+    color: #495057 !important;
+    border: none !important;
+
+    &:hover {
+      background: #f8f9fa !important;
+    }
+  }
+}
+
+.leaflet-control-attribution {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+  border-radius: 4px !important;
+  font-size: 10px !important;
+}
+
+/* ===== FOOTER / NAV INFERIOR ===== */
 ion-footer {
   ion-toolbar {
-    --background: var(--ion-color-primary);
+    --background: #009fe3; /* celeste de la maqueta */
     --min-height: 56px;
-    
-    div {
+
+    > div {
       display: flex;
       flex-direction: row;
       align-items: flex-end;
@@ -175,12 +192,13 @@ ion-footer {
   display: flex;
   flex-direction: column;
   align-items: center;
-  
+  position: relative;
+
   ion-icon {
     font-size: 24px;
     color: #fff;
   }
-  
+
   span {
     font-size: 12px;
     color: #fff;
@@ -190,148 +208,89 @@ ion-footer {
   }
 }
 
+/* Indicador de pestaña activa (opcional, si usas routerLinkActive="active-tab") */
+.footer-button.active-tab::after {
+  content: "";
+  position: absolute;
+  bottom: 4px; /* dentro del footer, sin salirse */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 4px;
+  background: #ffffff;
+  border-radius: 4px;
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .reportar-btn-container {
-    bottom: 70px;
-    padding: 0 12px;
+  .reportar-wrapper {
+    bottom: 76px;
   }
-  
-  .gps-btn-container {
-    right: 1cm;
-    bottom: 80px;
-  }
-  
-  #map {
-    height: calc(100vh - 56px - 50px - 56px); /* Ajuste para móviles */
-  }
-  
+
   .reportar-btn {
-    width: calc(100vw - 2cm - 48px - 12px);
+    width: 80%;
   }
 }
 
 @media (max-width: 480px) {
-  .reportar-btn-container {
-    gap: 12px;
+  .reportar-wrapper {
+    bottom: 74px;
+    padding: 0 12px;
   }
-  
-  .gps-btn-container {
-    right: 0.5cm;
-  }
-  
+
   .reportar-btn {
     font-size: 14px;
   }
-  
+
   ion-footer {
-    ion-toolbar {
-      div {
-        gap: 0.5cm;
-      }
+    ion-toolbar > div {
+      gap: 0.5cm;
     }
   }
 }
 
-/* ===== ANIMACIONES ===== */
+/* ===== ANIMACIONES / EFECTOS ===== */
 @keyframes fadeIn {
-  from { 
-    opacity: 0; 
-    transform: translateY(10px); 
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-}
-
-.reportar-form-container {
-  animation: fadeIn 0.3s ease-out;
 }
 
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .gps-btn:active {
   animation: pulse 0.2s ease-in-out;
 }
 
-/* ===== ESTILOS ADICIONALES PARA MEJORA VISUAL ===== */
-.leaflet-control-zoom {
-  border: none !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
-  
-  a {
-    background: #fff !important;
-    color: #495057 !important;
-    border: none !important;
-    
-    &:hover {
-      background: #f8f9fa !important;
-    }
-  }
-}
-
-.leaflet-control-attribution {
-  background: rgba(255, 255, 255, 0.9) !important;
-  border: none !important;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
-  border-radius: 4px !important;
-  font-size: 10px !important;
-}
-
-/* Mejorar el contraste de los botones en modo oscuro */
-@media (prefers-color-scheme: dark) {
-  .reportar-form-container {
-    background: #1e1e1e;
-    
-    ion-item {
-      --background: #2d2d2d;
-      
-      ion-label {
-        color: #e9ecef;
-      }
-    }
-  }
-  
-  .leaflet-popup-content-wrapper {
-    background: #1e1e1e;
-    
-    .leaflet-popup-content {
-      strong {
-        color: #f8f9fa;
-      }
-      
-      small {
-        color: #adb5bd;
-      }
-    }
-  }
-}
-
-/* Estados de hover y focus para mejor UX */
+/* Efecto general para ion-button */
 ion-button {
   transition: all 0.2s ease-in-out;
-  
+
   &:hover {
     transform: translateY(-1px);
   }
-  
+
   &:active {
     transform: translateY(0);
   }
 }
 
-/* Scroll personalizado para el textarea */
+/* Resaltado de textarea */
 ion-textarea {
-  --highlight-color: var(--ion-color-primary);
-}
-
-/* Asegurar que el mapa ocupe todo el espacio disponible */
-.page-content {
-  height: 100%;
-  position: relative;
+  --highlight-color: #009fe3;
 }
