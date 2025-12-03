@@ -20,6 +20,115 @@ ion-textarea {
   min-height: 100px;
 }
 
+.file-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+
+  .file-chips {
+    display: flex;
+    flex-direction: column; /* mostrar hacia abajo en móviles */
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  ion-chip {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .file-name {
+    font-size: 13px;
+    color: #1a1a1a;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* permitir que el nombre se envuelva en pantallas pequeñas */
+    white-space: normal;
+    display: inline-block;
+    max-width: 100%;
+    word-break: break-word;
+  }
+
+  .file-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .file-line .name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    max-width: 70%;
+  }
+
+  .file-line .size {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+  }
+
+  .file-errors {
+    margin-top: 6px;
+  }
+}
+
+.file-error {
+  color: var(--ion-color-danger, #c53030);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+ .file-picker-row {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin-top: 8px;
+  align-items: center;
+
+  ion-button {
+    display: inline-flex;
+    /* ancho controlado para no solaparse con etiquetas largas */
+    width: 100%;
+    min-width: 0;
+    margin-top: 0;
+    z-index: 0;
+  }
+}
+
+/* Estilos específicos para el ion-item contenedor del selector de archivos */
+.file-item {
+  /* asegurar que el contenido fluya verticalmente */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch;
+  overflow: visible;
+
+  ion-label[stacked] {
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .file-info {
+    margin-top: 8px;
+  }
+}
+
+/* Asegurar orden específico dentro de file-item */
+.file-item .file-label { order: 0; width: 100%; }
+.file-item .file-picker-row { order: 1; width: 100%; }
+.file-item .file-info { order: 2; width: 100%; }
+
+.file-none {
+  color: #666;
+  font-size: 13px;
+  margin-top: 6px;
+}
+
 .error-message {
   color: var(--ion-color-danger);
   font-size: 14px;
@@ -45,4 +154,65 @@ ion-footer {
     font-size: 12px;
     margin-top: 4px;
   }
+}
+
+/* Ajustes responsivos para el formulario */
+@media (max-width: 420px) {
+  form {
+    padding: 12px;
+  }
+  .file-name {
+    max-width: 140px;
+  }
+  .file-picker-row {
+    /* en móviles forzamos disposición vertical para evitar solapamientos */
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .file-picker-row ion-button {
+    width: 100% !important;
+    max-width: none;
+  }
+}
+
+/* Forzar chips apilados ocupando toda la línea */
+.file-chips ion-chip {
+  display: block;
+  width: 100%;
+}
+
+.file-chips ion-chip ion-label {
+  display: block;
+  width: calc(100% - 40px);
+}
+
+/* Asegurar que cada chip muestre nombre y tamaño en filas separadas si es necesario */
+.file-chips ion-chip {
+  padding: 6px 8px;
+}
+.file-chips ion-chip .file-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.file-label {
+  display: block;
+  margin-bottom: 6px;
+}
+
+.file-label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #222;
+  display: block;
+}
+
+/* Force vertical layout inside ion-item for mobile */
+.file-item {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch;
 }

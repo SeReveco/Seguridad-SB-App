@@ -74,6 +74,42 @@
           placeholder="Describe detalladamente tu solicitud...">
         </ion-textarea>
       </ion-item>
+
+      <!-- Adjuntar archivos: solo para ciudadanos (PDFs, máx. 5 MB cada uno). Obligatorio -->
+      <div class="file-item file-item-container" *ngIf="tipoUsuario === 'ciudadano'">
+        <div class="file-label">Adjuntar archivos (PDF, máx. 5 MB cada uno) - Obligatorio</div>
+
+        <!-- Input oculto y botón visible dentro de row -->
+        <div class="file-picker-row">
+          <input #fileInput type="file" (change)="onFileSelected($event)" accept=".pdf,application/pdf" multiple hidden />
+          <ion-button color="primary" (click)="fileInput.click()">
+            <ion-icon name="cloud-upload-outline" slot="start"></ion-icon>
+            Elegir archivos
+          </ion-button>
+        </div>
+
+        <div class="file-info">
+          <div class="file-chips">
+            <ion-chip *ngFor="let f of selectedFiles; let i = index" outline>
+              <ion-label class="file-name">
+                <div class="file-line">
+                  <span class="name">{{ f.name }}</span>
+                  <span class="size">{{ formatBytes(f.size) }}</span>
+                </div>
+              </ion-label>
+              <ion-button fill="clear" size="small" (click)="removeFile(i)">
+                <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-chip>
+          </div>
+
+          <div *ngIf="selectedFiles.length === 0" class="file-none">No hay archivos seleccionados</div>
+
+          <div *ngIf="fileErrors && fileErrors.length" class="file-errors">
+            <div *ngFor="let e of fileErrors" class="file-error">{{ e }}</div>
+          </div>
+        </div>
+      </div>
     </ion-list>
 
     <!-- Mensaje de error -->
